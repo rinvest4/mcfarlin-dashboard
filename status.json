@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-02-24T19:30:27.902695",
+  "generated_at": "2026-02-24T13:56:32.962532",
   "heartbeat": {
-    "timestamp": "2026-02-24T13:56:00.956506",
+    "timestamp": "2026-02-24T13:56:32.962532",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
     "active_agents": 1,
     "blocked_agents": 7,
     "disabled_agents": 5,
-    "escalations": 0,
+    "escalations": 5,
     "pending_tasks": 61,
     "completed_tasks": 61,
     "overdue_tasks": 6,
@@ -24,7 +24,7 @@
       "schedule": "every 30 minutes",
       "enabled": true,
       "wave": "1.1",
-      "last_log": "2026-02-24T17:34:49",
+      "last_log": "2026-02-24T13:45:07.594362",
       "entities": [
         "all"
       ]
@@ -38,7 +38,7 @@
       "schedule": "every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM",
       "enabled": true,
       "wave": "1.3",
-      "last_log": null,
+      "last_log": "2026-02-24T12:15:08.725336",
       "entities": [
         "bvr"
       ]
@@ -68,7 +68,7 @@
       "schedule": "every hour during business hours",
       "enabled": true,
       "wave": "2.1",
-      "last_log": null,
+      "last_log": "2026-02-24T11:24:36.785879",
       "entities": [
         "rdre"
       ]
@@ -82,7 +82,7 @@
       "schedule": "daily at 7 AM, monthly deep on 1st",
       "enabled": true,
       "wave": "2.2",
-      "last_log": null,
+      "last_log": "2026-02-24T07:00:15.875585",
       "entities": [
         "all"
       ]
@@ -168,7 +168,7 @@
       "schedule": "continuous + weekly deep Sundays",
       "enabled": false,
       "wave": "4",
-      "last_log": null,
+      "last_log": "2026-02-24T05:00:20.046086",
       "entities": [
         "all"
       ]
@@ -182,7 +182,7 @@
       "schedule": "daily at 6 AM, weekly Sundays, real-time engagement",
       "enabled": true,
       "wave": "3",
-      "last_log": null,
+      "last_log": "2026-02-24T06:00:53.701560",
       "entities": [
         "rdre"
       ]
@@ -196,13 +196,34 @@
       "schedule": "Not configured",
       "enabled": false,
       "wave": "1.2",
-      "last_log": null,
+      "last_log": "2026-02-24T13:27:05.294418",
       "entities": [
         "all"
       ]
     }
   ],
-  "escalations": [],
+  "escalations": [
+    {
+      "source": "security/security-check-2026-02-24-0500.md",
+      "keyword": "error"
+    },
+    {
+      "source": "email-triage/triage-2026-02-24.md",
+      "keyword": "urgent"
+    },
+    {
+      "source": "crm/crm-check-2026-02-24-0323.md",
+      "keyword": "error"
+    },
+    {
+      "source": "crm/crm-check-2026-02-24-0724.md",
+      "keyword": "error"
+    },
+    {
+      "source": "crm/crm-check-2026-02-24-1124.md",
+      "keyword": "error"
+    }
+  ],
   "deadlines": [
     {
       "text": "Follow up with Provident Loan Servicing if no response to Feb 21 formal escalation \u2014 by March 6. Rem",
@@ -232,23 +253,23 @@
   "system_health": {
     "watchdog": {
       "status": "warning",
-      "detail": "Last check: 05:34 PM"
+      "detail": "Last check: 12:15 PM"
     },
     "auto_backup": {
-      "status": "warning",
-      "detail": "Last: 05:34 PM"
+      "status": "ok",
+      "detail": "Last: 01:45 PM"
     },
     "morning_briefing": {
       "status": "ok",
-      "detail": "Sent at 05:34 PM"
+      "detail": "Sent at 10:15 AM"
     },
     "auto_merge": {
       "status": "warning",
-      "detail": "Check launchd"
+      "detail": "Last: 10:15 AM"
     },
     "github_push": {
-      "status": "warning",
-      "detail": "Last: 05:34 PM"
+      "status": "ok",
+      "detail": "Last: 01:45 PM"
     }
   },
   "tasks": {

@@ -1,0 +1,3 @@
+# Redirect old GitHub Pages paths if anyone bookmarked them
+/mcfarlin-dashboard/  /  301
+/mcfarlin-dashboard/index.html  /  301
