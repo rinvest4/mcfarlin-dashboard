@@ -284,8 +284,8 @@ const ROLES_CONFIG = {
     }
   },
   users: {
-    'sean@mcfarlin.com': 'admin',
-    'amanda@mcfarlin.com': 'rdre-marketing'
+    'rinvest4@gmail.com': 'admin',
+    'amandalastudios@gmail.com': 'rdre-marketing'
   },
   agent_entities: {
     operations_commander: ['all'],
@@ -754,11 +754,48 @@ function updateApprovals(data) {
   `).join('');
 }
 
-function handleApproval(index, action) {
-  // For now, show a message. When the backend approval system is built,
-  // this will write to logs/approvals/rdre-marketing/ via an API
-  const actions = { approve: 'Approved', reject: 'Rejected', view: 'Viewing' };
-  alert(actions[action] + ' — approval system backend coming soon. For now, text Sean or reply to the email.');
+async function handleApproval(index, action) {
+  const approvals = currentData.pending_approvals || [];
+  const item = approvals[index];
+  if (!item) return;
+
+  if (action === 'view') {
+    // Show details in a simple modal-style overlay
+    const detail = item.description || 'No additional details available.';
+    alert('Details for: ' + item.title + '\n\n' + detail + '\n\nFile: ' + (item.file || 'N/A'));
+    return;
+  }
+
+  const note = prompt((action === 'approve' ? 'Approve' : 'Reject') + ' "' + item.title + '"?\n\nOptional note:');
+  if (note === null) return; // cancelled
+
+  try {
+    const resp = await fetch('/api/approve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, action, note }),
+    });
+    const result = await resp.json();
+
+    if (result.ok) {
+      // Remove from local data and re-render
+      currentData.pending_approvals.splice(index, 1);
+      updateApprovals(currentData);
+      updateSummary(currentData);
+    } else {
+      alert('Error: ' + (result.error || 'Unknown error'));
+    }
+  } catch (err) {
+    // API not available yet (static hosting) — fall back to local-only
+    console.warn('Approval API not available, recording locally:', err.message);
+    currentData.pending_approvals.splice(index, 1);
+    updateApprovals(currentData);
+    updateSummary(currentData);
+    // Store decision in localStorage as backup
+    const decisions = JSON.parse(localStorage.getItem('approval-decisions') || '[]');
+    decisions.push({ id: item.id, action, note, at: new Date().toISOString() });
+    localStorage.setItem('approval-decisions', JSON.stringify(decisions));
+  }
 }
 
 // ══════════════════════════════════════════
@@ -859,7 +896,14 @@ function renderAll(data) {
 
 async function loadStatus() {
   try {
-    const resp = await fetch(STATUS_URL + '?t=' + Date.now());
+    // Try KV-backed API first (real-time), fall back to static file
+    let resp;
+    try {
+      resp = await fetch('/api/sync?t=' + Date.now());
+      if (!resp.ok) throw new Error('API returned ' + resp.status);
+    } catch {
+      resp = await fetch(STATUS_URL + '?t=' + Date.now());
+    }
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     currentData = await resp.json();
 
