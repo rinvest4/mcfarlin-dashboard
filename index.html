@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>McFarlin Operations</title>
+<style>
+  :root {--bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e4e4e7;--muted:#71717a;--green:#22c55e;--gbg:rgba(34,197,94,.12);--red:#ef4444;--rbg:rgba(239,68,68,.12);--yellow:#eab308;--ybg:rgba(234,179,8,.12);--blue:#3b82f6;--bbg:rgba(59,130,246,.12);--purple:#a855f7;--pbg:rgba(168,85,247,.12)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding:16px;max-width:1200px;margin:0 auto}
+  a{color:var(--blue);text-decoration:none}
+
+  /* Heartbeat banner */
+  .hb{padding:12px 16px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .hb-online{background:var(--gbg);border:1px solid rgba(34,197,94,.3)}
+  .hb-delayed{background:var(--ybg);border:1px solid rgba(234,179,8,.3)}
+  .hb-offline{background:var(--rbg);border:1px solid rgba(239,68,68,.3);animation:pulse 2s infinite}
+  .hb-unknown{background:var(--card);border:1px solid var(--border)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+  .hb-status{font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px}
+  .hb-detail{font-size:.75rem;color:var(--muted)}
+  .hb-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+  h1{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:.85rem;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
+  .card-t{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:12px}
+  .grid{display:grid;gap:12px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+  @media(max-width:768px){.g2,.g3,.g4{grid-template-columns:1fr}body{padding:12px}}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0;overflow-x:auto}
+  .tab{padding:10px 20px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+  .tab-content{display:none}.tab-content.active{display:block}
+
+  /* Badges */
+  .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
+  .bg{background:var(--gbg);color:var(--green)}.br{background:var(--rbg);color:var(--red)}.by{background:var(--ybg);color:var(--yellow)}.bb{background:var(--bbg);color:var(--blue)}.bp{background:var(--pbg);color:var(--purple)}
+  .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+  .dg{background:var(--green)}.dr{background:var(--red)}.dy{background:var(--yellow)}.db{background:var(--blue)}
+
+  /* Mini stats */
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+  .stats{display:flex;gap:10px;flex-wrap:wrap}
+  .ms{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 14px;text-align:center;min-width:80px}
+  .ms .v{font-size:1.3rem;font-weight:700}.ms .l{font-size:.75rem;color:var(--muted)}
+
+  /* Agent rows */
+  .ar{border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+  .ar:last-child{border-bottom:none}
+  .ar:hover{background:rgba(59,130,246,.05)}
+  .ar-main{display:flex;align-items:center;justify-content:space-between;padding:10px 0;gap:8px}
+  .ar-left{display:flex;align-items:center;flex:1;min-width:0}
+  .anum{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;margin-right:12px;flex-shrink:0}
+  .aname{font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .adet{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* Escalations */
+  .esc{padding:12px;background:var(--rbg);border:1px solid rgba(239,68,68,.25);border-radius:8px;margin-bottom:8px}
+  .esc:last-child{margin-bottom:0}
+  .esc-t{font-size:.85rem;font-weight:600;color:var(--red)}.esc-d{font-size:.75rem;color:var(--muted);margin-top:4px}
+
+  /* Deadlines */
+  .dl{padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .dl:last-child{border-bottom:none}
+
+  /* Progress bar */
+  .pb{width:100%;height:6px;background:var(--border);border-radius:3px;margin-top:8px;overflow:hidden}
+  .pf{height:100%;border-radius:3px}
+
+  /* Health items */
+  .hi{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem}
+  .hi:last-child{border-bottom:none}
+
+  /* Loading / error */
+  .loading{text-align:center;padding:40px;color:var(--muted);font-size:.9rem}
+  .loading-spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .section{margin-bottom:16px}
+  .sec-t{font-size:1.1rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .ts{text-align:center;color:var(--muted);font-size:.7rem;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+  .refresh-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:.75rem;cursor:pointer;transition:all .2s}
+  .refresh-btn:hover{color:var(--text);border-color:var(--blue)}
+</style>
+</head>
+<body>
+
+<!-- HEARTBEAT BANNER -->
+<div class="hb hb-unknown" id="heartbeat">
+  <div class="hb-status">
+    <span class="hb-dot" id="hb-dot" style="background:var(--muted)"></span>
+    <span id="hb-label">Connecting...</span>
+  </div>
+  <div class="hb-detail" id="hb-detail">Loading dashboard data</div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>McFarlin Operations</h1>
+    <div class="sub" id="date-line">Loading...</div>
+  </div>
+  <div class="stats" id="summary-stats">
+    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Active</div></div>
+    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Blocked</div></div>
+    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Disabled</div></div>
+    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Escalations</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">Overview</div>
+  <div class="tab" onclick="showTab('agents')">Agents</div>
+  <div class="tab" onclick="showTab('system')">System</div>
+</div>
+
+<!-- OVERVIEW TAB -->
+<div class="tab-content active" id="tab-overview">
+  <div id="escalations-section" class="section" style="display:none">
+    <div class="sec-t"><span style="color:var(--red)">&#9888;</span> Needs Your Attention</div>
+    <div id="escalations-list"></div>
+  </div>
+
+  <div class="grid g2 section">
+    <div class="card">
+      <div class="card-t">Key Deadlines</div>
+      <div id="deadlines-list">
+        <div class="loading"><div class="loading-spin"></div><br>Loading...</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t">Task Queue</div>
+      <div id="tasks-summary">
+        <div class="loading"><div class="loading-spin"></div><br>Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENTS TAB -->
+<div class="tab-content" id="tab-agents">
+  <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Agent status updated every 30 minutes by Operations Commander.</p>
+  <div class="card" id="agents-list">
+    <div class="loading"><div class="loading-spin"></div><br>Loading agents...</div>
+  </div>
+</div>
+
+<!-- SYSTEM TAB -->
+<div class="tab-content" id="tab-system">
+  <div class="grid g2 section">
+    <div class="card">
+      <div class="card-t">Infrastructure Health</div>
+      <div id="system-health">
+        <div class="loading"><div class="loading-spin"></div><br>Loading...</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t">Connection Info</div>
+      <div id="connection-info" style="font-size:.85rem;color:var(--muted)">
+        <div class="hi"><span>Data source</span><span>status.json via GitHub Pages</span></div>
+        <div class="hi"><span>Refresh interval</span><span>Every 5 minutes</span></div>
+        <div class="hi"><span>Mac Mini pushes</span><span>Every 15 minutes (auto-backup)</span></div>
+        <div class="hi"><span>Status generated</span><span>Every 30 minutes (Ops Commander)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ts">
+  <button class="refresh-btn" onclick="loadStatus()">Refresh Now</button>
+  <div style="margin-top:8px" id="footer-ts">McFarlin AI Agent System &bull; Web Dashboard</div>
+</div>
+
+<script>
+const STATUS_URL = 'status.json';
+let currentData = null;
+
+// ── Tab switching ──
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── Time helpers ──
+function timeAgo(isoStr) {
+  if (!isoStr) return 'Never';
+  const diff = (Date.now() - new Date(isoStr).getTime()) / 1000;
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return Math.floor(diff / 60) + ' min ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+function formatDate(isoStr) {
+  if (!isoStr) return '';
+  const d = new Date(isoStr);
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function formatTime(isoStr) {
+  if (!isoStr) return '';
+  const d = new Date(isoStr);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+// ── Heartbeat ──
+function updateHeartbeat(data) {
+  const hb = document.getElementById('heartbeat');
+  const dot = document.getElementById('hb-dot');
+  const label = document.getElementById('hb-label');
+  const detail = document.getElementById('hb-detail');
+
+  if (!data || !data.heartbeat) {
+    hb.className = 'hb hb-unknown';
+    dot.style.background = 'var(--muted)';
+    label.textContent = 'No Data';
+    detail.textContent = 'Could not load status.json — is the Mac Mini pushing to GitHub?';
+    return;
+  }
+
+  const ts = new Date(data.heartbeat.timestamp);
+  const diffMin = (Date.now() - ts.getTime()) / 60000;
+
+  if (diffMin < 60) {
+    hb.className = 'hb hb-online';
+    dot.style.background = 'var(--green)';
+    label.textContent = 'Mac Mini Online';
+    label.style.color = 'var(--green)';
+    detail.textContent = 'Last heartbeat: ' + timeAgo(data.heartbeat.timestamp) + ' \u2022 ' + (data.heartbeat.hostname || '');
+  } else if (diffMin < 120) {
+    hb.className = 'hb hb-delayed';
+    dot.style.background = 'var(--yellow)';
+    label.textContent = 'Mac Mini \u2014 Delayed';
+    label.style.color = 'var(--yellow)';
+    detail.textContent = 'Last heartbeat: ' + Math.floor(diffMin) + ' min ago. May need attention soon.';
+  } else {
+    hb.className = 'hb hb-offline';
+    dot.style.background = 'var(--red)';
+    label.textContent = 'MAC MINI OFFLINE';
+    label.style.color = 'var(--red)';
+    const hours = Math.floor(diffMin / 60);
+    detail.textContent = 'Last heartbeat: ' + hours + 'h ago. SSH in and log in to restart agents.';
+  }
+}
+
+// ── Summary stats ──
+function updateSummary(data) {
+  if (!data || !data.summary) return;
+  const s = data.summary;
+  document.getElementById('summary-stats').innerHTML = `
+    <div class="ms"><div class="v" style="color:var(--green)">${s.active_agents}</div><div class="l">Active</div></div>
+    <div class="ms"><div class="v" style="color:var(--yellow)">${s.blocked_agents}</div><div class="l">Blocked</div></div>
+    <div class="ms"><div class="v" style="color:var(--muted)">${s.disabled_agents}</div><div class="l">Disabled</div></div>
+    <div class="ms"><div class="v" style="color:var(--red)">${s.escalations}</div><div class="l">Escalations</div></div>
+  `;
+  document.getElementById('date-line').textContent = formatDate(data.generated_at) +
+    ' \u2022 Updated ' + timeAgo(data.generated_at);
+}
+
+// ── Escalations ──
+function updateEscalations(data) {
+  const section = document.getElementById('escalations-section');
+  const list = document.getElementById('escalations-list');
+  if (!data || !data.escalations || data.escalations.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  list.innerHTML = data.escalations.map(e => `
+    <div class="esc">
+      <div class="esc-t">${escHtml(e.source || e.title || 'Alert')}</div>
+      <div class="esc-d">Keyword: ${escHtml(e.keyword || e.detail || '')}</div>
+    </div>
+  `).join('');
+}
+
+// ── Deadlines ──
+function updateDeadlines(data) {
+  const el = document.getElementById('deadlines-list');
+  if (!data || !data.deadlines || data.deadlines.length === 0) {
+    el.innerHTML = '<div style="font-size:.85rem;color:var(--muted);padding:12px 0">No upcoming deadlines found.</div>';
+    return;
+  }
+  el.innerHTML = data.deadlines.map(d => {
+    const color = d.severity === 'high' ? 'var(--red)' : d.severity === 'medium' ? 'var(--yellow)' : 'var(--muted)';
+    const days = d.days_until;
+    const label = days < 0 ? Math.abs(days) + 'd overdue' : days === 0 ? 'TODAY' : days + 'd';
+    return `<div class="dl">
+      <span style="color:${color};font-weight:${d.severity==='high'?600:400}">${escHtml(d.text)}</span>
+      <span class="badge ${d.severity==='high'?'br':d.severity==='medium'?'by':'bb'}" style="flex-shrink:0">${label}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── Tasks ──
+function updateTasks(data) {
+  const el = document.getElementById('tasks-summary');
+  if (!data || !data.tasks) {
+    el.innerHTML = '<div style="color:var(--muted)">No task data</div>';
+    return;
+  }
+  const t = data.tasks;
+  const total = t.pending + t.completed;
+  const pct = total > 0 ? Math.round((t.completed / total) * 100) : 0;
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+      <div><span style="font-size:1.5rem;font-weight:700">${t.pending}</span> <span style="font-size:.8rem;color:var(--muted)">open</span></div>
+      <div><span style="font-size:1.5rem;font-weight:700;color:var(--green)">${t.completed}</span> <span style="font-size:.8rem;color:var(--muted)">done</span></div>
+    </div>
+    <div class="pb"><div class="pf" style="width:${pct}%;background:var(--green)"></div></div>
+    <div style="font-size:.75rem;color:var(--muted);margin-top:6px">${pct}% completion rate${t.overdue > 0 ? ' \u2022 <span style=\"color:var(--red)\">' + t.overdue + ' overdue</span>' : ''}</div>
+  `;
+}
+
+// ── Agents ──
+function updateAgents(data) {
+  const el = document.getElementById('agents-list');
+  if (!data || !data.agents) {
+    el.innerHTML = '<div style="color:var(--muted);padding:12px">No agent data</div>';
+    return;
+  }
+
+  el.innerHTML = data.agents.map(a => {
+    const statusMap = {
+      running: { badge: 'bg', label: 'Running', dot: 'dg', numBg: 'var(--gbg)', numColor: 'var(--green)' },
+      next_up: { badge: 'by', label: 'Next Up', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
+      partial: { badge: 'bb', label: 'Partial', dot: 'db', numBg: 'var(--bbg)', numColor: 'var(--blue)' },
+      wave2: { badge: 'by', label: 'Wave 2', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
+      wave3: { badge: 'by', label: 'Wave 3', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
+      wave4: { badge: 'bp', label: 'Wave 4', dot: 'dp', numBg: 'var(--border)', numColor: 'var(--muted)' },
+      disabled: { badge: 'bp', label: 'Disabled', dot: 'dp', numBg: 'var(--border)', numColor: 'var(--muted)' },
+    };
+    const s = statusMap[a.status] || statusMap.disabled;
+    const lastRun = a.last_log ? 'Last: ' + timeAgo(a.last_log) : 'No logs yet';
+
+    return `<div class="ar">
+      <div class="ar-main">
+        <div class="ar-left">
+          <div class="anum" style="background:${s.numBg};color:${s.numColor}">${a.number}</div>
+          <div style="min-width:0">
+            <div class="aname">${escHtml(a.name)}</div>
+            <div class="adet">${escHtml(a.role)} \u2022 ${escHtml(a.schedule)} \u2022 ${lastRun}</div>
+          </div>
+        </div>
+        <span class="badge ${s.badge}"><span class="dot ${s.dot}"></span> ${s.label}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── System Health ──
+function updateSystemHealth(data) {
+  const el = document.getElementById('system-health');
+  if (!data || !data.system_health) {
+    el.innerHTML = '<div style="color:var(--muted)">No health data</div>';
+    return;
+  }
+
+  const nameMap = {
+    watchdog: 'Watchdog',
+    auto_backup: 'Auto-Backup',
+    morning_briefing: 'Morning Briefing',
+    auto_merge: 'Auto-Merge',
+    github_push: 'GitHub Push',
+  };
+
+  const h = data.system_health;
+  el.innerHTML = Object.keys(h).map(key => {
+    const item = h[key];
+    const statusClass = item.status === 'ok' ? 'bg' : item.status === 'error' ? 'br' : 'by';
+    const dotClass = item.status === 'ok' ? 'dg' : item.status === 'error' ? 'dr' : 'dy';
+    const label = item.status === 'ok' ? 'OK' : item.status === 'error' ? 'Error' : 'Warning';
+    return `<div class="hi">
+      <span>${nameMap[key] || key}</span>
+      <span class="badge ${statusClass}"><span class="dot ${dotClass}"></span> ${escHtml(item.detail || label)}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── HTML escaping ──
+function escHtml(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ── Load status ──
+async function loadStatus() {
+  try {
+    const resp = await fetch(STATUS_URL + '?t=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    currentData = await resp.json();
+
+    updateHeartbeat(currentData);
+    updateSummary(currentData);
+    updateEscalations(currentData);
+    updateDeadlines(currentData);
+    updateTasks(currentData);
+    updateAgents(currentData);
+    updateSystemHealth(currentData);
+
+    document.getElementById('footer-ts').textContent =
+      'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString();
+  } catch (err) {
+    console.error('Failed to load status:', err);
+    updateHeartbeat(null);
+    document.getElementById('date-line').textContent = 'Failed to load data \u2014 ' + err.message;
+  }
+}
+
+// Load immediately, then refresh every 5 minutes
+loadStatus();
+setInterval(loadStatus, 5 * 60 * 1000);
+</script>
+
+</body>
+</html>
