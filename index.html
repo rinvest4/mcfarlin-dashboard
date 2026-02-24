@@ -84,9 +84,49 @@
   .ts{text-align:center;color:var(--muted);font-size:.7rem;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
   .refresh-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:.75rem;cursor:pointer;transition:all .2s}
   .refresh-btn:hover{color:var(--text);border-color:var(--blue)}
+
+  /* Role switcher */
+  .role-switcher{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px}
+  .role-switcher label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .role-switcher select{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.85rem;cursor:pointer}
+  .role-switcher select:focus{outline:none;border-color:var(--blue)}
+  .role-tag{font-size:.7rem;padding:2px 8px;border-radius:12px;background:var(--pbg);color:var(--purple);font-weight:600}
+
+  /* Approval items */
+  .approval-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+  .approval-item .ai-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .approval-item .ai-title{font-size:.9rem;font-weight:600}
+  .approval-item .ai-agent{font-size:.72rem;color:var(--muted)}
+  .approval-item .ai-desc{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.4}
+  .approval-item .ai-actions{display:flex;gap:8px}
+  .btn{padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+  .btn-approve{background:var(--gbg);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+  .btn-approve:hover{background:rgba(34,197,94,.25)}
+  .btn-reject{background:var(--rbg);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+  .btn-reject:hover{background:rgba(239,68,68,.25)}
+  .btn-view{background:var(--bbg);color:var(--blue);border:1px solid rgba(59,130,246,.3)}
+  .btn-view:hover{background:rgba(59,130,246,.25)}
+
+  /* Empty state */
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+  .empty-state .emoji{font-size:2rem;margin-bottom:8px}
+  .empty-state .msg{font-size:.9rem}
+  .empty-state .detail{font-size:.75rem;margin-top:4px}
+
+  /* VA task items */
+  .task-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:.85rem}
+  .task-item:last-child{border-bottom:none}
+  .task-priority{width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0}
 </style>
 </head>
 <body>
+
+<!-- ROLE SWITCHER (admin only) -->
+<div class="role-switcher" id="role-switcher" style="display:none">
+  <label>Viewing as</label>
+  <select id="role-select" onchange="switchRole(this.value)"></select>
+  <span class="role-tag" id="role-tag"></span>
+</div>
 
 <!-- HEARTBEAT BANNER -->
 <div class="hb hb-unknown" id="heartbeat">
@@ -100,7 +140,7 @@
 <!-- HEADER -->
 <div class="hdr">
   <div>
-    <h1>McFarlin Operations</h1>
+    <h1 id="dashboard-title">McFarlin Operations</h1>
     <div class="sub" id="date-line">Loading...</div>
   </div>
   <div class="stats" id="summary-stats">
@@ -112,10 +152,12 @@
 </div>
 
 <!-- TABS -->
-<div class="tabs">
-  <div class="tab active" onclick="showTab('overview')">Overview</div>
-  <div class="tab" onclick="showTab('agents')">Agents</div>
-  <div class="tab" onclick="showTab('system')">System</div>
+<div class="tabs" id="tabs-container">
+  <div class="tab active" data-tab="overview" onclick="showTab('overview')">Overview</div>
+  <div class="tab" data-tab="agents" onclick="showTab('agents')">Agents</div>
+  <div class="tab" data-tab="approvals" onclick="showTab('approvals')">Approvals</div>
+  <div class="tab" data-tab="tasks" onclick="showTab('tasks')">Tasks</div>
+  <div class="tab" data-tab="system" onclick="showTab('system')">System</div>
 </div>
 
 <!-- OVERVIEW TAB -->
@@ -149,6 +191,40 @@
   </div>
 </div>
 
+<!-- APPROVALS TAB -->
+<div class="tab-content" id="tab-approvals">
+  <div class="section">
+    <div class="sec-t">Pending Approvals</div>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Items waiting for your review before agents can proceed.</p>
+    <div id="approvals-list">
+      <div class="loading"><div class="loading-spin"></div><br>Loading approvals...</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-t" style="font-size:.95rem">Recent Decisions</div>
+    <div id="approvals-history">
+      <div style="font-size:.85rem;color:var(--muted);padding:12px 0">No recent decisions.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TASKS TAB (for VAs) -->
+<div class="tab-content" id="tab-tasks">
+  <div class="section">
+    <div class="sec-t">Your Tasks</div>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Tasks assigned to your role. Complete these and check back for updates.</p>
+    <div class="card" id="va-tasks-list">
+      <div class="loading"><div class="loading-spin"></div><br>Loading tasks...</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-t" style="font-size:.95rem">Today's Schedule</div>
+    <div class="card" id="va-schedule">
+      <div style="font-size:.85rem;color:var(--muted)">No schedule data available yet.</div>
+    </div>
+  </div>
+</div>
+
 <!-- SYSTEM TAB -->
 <div class="tab-content" id="tab-system">
   <div class="grid g2 section">
@@ -161,7 +237,7 @@
     <div class="card">
       <div class="card-t">Connection Info</div>
       <div id="connection-info" style="font-size:.85rem;color:var(--muted)">
-        <div class="hi"><span>Data source</span><span>status.json via GitHub Pages</span></div>
+        <div class="hi"><span>Data source</span><span>status.json via Cloudflare Pages</span></div>
         <div class="hi"><span>Refresh interval</span><span>Every 5 minutes</span></div>
         <div class="hi"><span>Mac Mini pushes</span><span>Every 15 minutes (auto-backup)</span></div>
         <div class="hi"><span>Status generated</span><span>Every 30 minutes (Ops Commander)</span></div>
@@ -176,18 +252,244 @@
 </div>
 
 <script>
+// ══════════════════════════════════════════
+//  ROLE-BASED DASHBOARD CONFIGURATION
+// ══════════════════════════════════════════
+
+const ROLES_CONFIG = {
+  roles: {
+    admin: {
+      label: 'Sean (Admin)',
+      entities: 'all',
+      agents: 'all',
+      sections: ['overview', 'agents', 'system', 'approvals', 'tasks'],
+      can_switch_roles: true,
+      title: 'McFarlin Operations'
+    },
+    'rdre-marketing': {
+      label: 'Amanda (RDRE)',
+      entities: ['rdre'],
+      agents: [3, 7, 12],
+      sections: ['approvals', 'overview'],
+      can_switch_roles: false,
+      title: 'RDRE Marketing Dashboard'
+    },
+    'bvr-va': {
+      label: 'VA (BVR)',
+      entities: ['bvr'],
+      agents: [2, 6],
+      sections: ['tasks', 'overview'],
+      can_switch_roles: false,
+      title: 'BVR Operations Dashboard'
+    }
+  },
+  users: {
+    'sean@mcfarlin.com': 'admin',
+    'amanda@mcfarlin.com': 'rdre-marketing'
+  },
+  agent_entities: {
+    operations_commander: ['all'],
+    bvr_operations: ['bvr'],
+    seo_marketing: ['rdre', 'bvr', 'personal'],
+    lead_crm: ['rdre'],
+    financial_oversight: ['all'],
+    bvr_property_listing: ['bvr'],
+    website_content: ['rdre', 'bvr', 'personal'],
+    contracts_legal: ['all'],
+    process_improvement: ['all'],
+    purchasing: ['bvr'],
+    it_security: ['all'],
+    social_media: ['rdre'],
+    email_triage: ['all']
+  }
+};
+
 const STATUS_URL = 'status.json';
 let currentData = null;
+let currentRole = 'admin'; // default, will be overridden by auth
+let actualRole = 'admin';  // the user's real role (for admin switching back)
 
-// ── Tab switching ──
+// ══════════════════════════════════════════
+//  ROLE DETECTION & SWITCHING
+// ══════════════════════════════════════════
+
+function detectRole() {
+  // Priority 1: URL parameter (for dev/testing and admin switching)
+  const params = new URLSearchParams(window.location.search);
+  const urlRole = params.get('role');
+  if (urlRole && ROLES_CONFIG.roles[urlRole]) {
+    currentRole = urlRole;
+  }
+
+  // Priority 2: Cloudflare Access JWT (production)
+  // When Cloudflare Access is configured, it sets a cookie with the user's email.
+  // We decode it to determine the role.
+  const cfEmail = getCfAccessEmail();
+  if (cfEmail) {
+    const mappedRole = ROLES_CONFIG.users[cfEmail.toLowerCase()];
+    if (mappedRole) {
+      actualRole = mappedRole;
+      // Only use CF role if no URL override, or if non-admin trying to override
+      if (!urlRole) {
+        currentRole = mappedRole;
+      } else if (mappedRole !== 'admin' && urlRole !== mappedRole) {
+        // Non-admin users can't switch roles via URL
+        currentRole = mappedRole;
+      }
+    }
+  }
+
+  // Priority 3: localStorage (remembers admin's last viewed role)
+  if (!urlRole && !cfEmail) {
+    const saved = localStorage.getItem('dashboard-role');
+    if (saved && ROLES_CONFIG.roles[saved]) {
+      currentRole = saved;
+    }
+  }
+}
+
+function getCfAccessEmail() {
+  // Cloudflare Access sets CF_Authorization cookie with a JWT
+  // The JWT payload contains the user's email
+  try {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'CF_Authorization' && value) {
+        const payload = JSON.parse(atob(value.split('.')[1]));
+        return payload.email || null;
+      }
+    }
+  } catch (e) {
+    // No CF Access cookie or invalid JWT — that's fine
+  }
+  return null;
+}
+
+function switchRole(role) {
+  if (!ROLES_CONFIG.roles[role]) return;
+  currentRole = role;
+  localStorage.setItem('dashboard-role', role);
+  applyRole();
+  if (currentData) renderAll(currentData);
+
+  // Update URL without reload
+  const url = new URL(window.location);
+  if (role === actualRole) {
+    url.searchParams.delete('role');
+  } else {
+    url.searchParams.set('role', role);
+  }
+  history.replaceState(null, '', url);
+}
+
+function applyRole() {
+  const role = ROLES_CONFIG.roles[currentRole];
+  if (!role) return;
+
+  // Update title
+  document.getElementById('dashboard-title').textContent = role.title;
+
+  // Show/hide role switcher (admin only)
+  const switcher = document.getElementById('role-switcher');
+  if (actualRole === 'admin' || !getCfAccessEmail()) {
+    // Show switcher for admin, or when no auth (dev mode)
+    switcher.style.display = 'flex';
+    const select = document.getElementById('role-select');
+    if (select.options.length === 0) {
+      for (const [key, r] of Object.entries(ROLES_CONFIG.roles)) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = r.label;
+        select.appendChild(opt);
+      }
+    }
+    select.value = currentRole;
+    document.getElementById('role-tag').textContent =
+      currentRole === actualRole ? 'Your view' : 'Previewing';
+  } else {
+    switcher.style.display = 'none';
+  }
+
+  // Show/hide tabs based on role sections
+  const allowedSections = role.sections;
+  document.querySelectorAll('.tab').forEach(tab => {
+    const tabId = tab.getAttribute('data-tab');
+    tab.style.display = allowedSections.includes(tabId) ? '' : 'none';
+  });
+
+  // Make sure active tab is visible, otherwise switch to first allowed
+  const activeTab = document.querySelector('.tab.active');
+  const activeTabId = activeTab ? activeTab.getAttribute('data-tab') : null;
+  if (!activeTabId || !allowedSections.includes(activeTabId)) {
+    showTab(allowedSections[0]);
+  }
+
+  // Hide heartbeat for non-admin (they don't need to know about Mac Mini)
+  const heartbeat = document.getElementById('heartbeat');
+  if (currentRole === 'admin') {
+    heartbeat.style.display = 'flex';
+  } else {
+    heartbeat.style.display = 'none';
+  }
+
+  // Adjust summary stats for non-admin
+  // (they'll be recalculated when data renders)
+}
+
+// ══════════════════════════════════════════
+//  TAB SWITCHING
+// ══════════════════════════════════════════
+
 function showTab(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  event.target.classList.add('active');
+  const content = document.getElementById('tab-' + id);
+  const tab = document.querySelector('.tab[data-tab="' + id + '"]');
+  if (content) content.classList.add('active');
+  if (tab) tab.classList.add('active');
 }
 
-// ── Time helpers ──
+// ══════════════════════════════════════════
+//  AGENT FILTERING
+// ══════════════════════════════════════════
+
+function filterAgentsForRole(agents) {
+  const role = ROLES_CONFIG.roles[currentRole];
+  if (!role || role.agents === 'all') return agents;
+
+  const allowedNumbers = role.agents;
+  const allowedEntities = role.entities;
+
+  return agents.filter(a => {
+    // Filter by agent number
+    if (allowedNumbers.includes(a.number)) return true;
+
+    // Also check entity match
+    const agentEntities = ROLES_CONFIG.agent_entities[a.key] || [];
+    if (agentEntities.includes('all')) return false; // cross-entity agents only for admin
+    return agentEntities.some(e => allowedEntities.includes(e));
+  });
+}
+
+function filterEscalationsForRole(escalations) {
+  const role = ROLES_CONFIG.roles[currentRole];
+  if (!role || role.entities === 'all') return escalations;
+
+  const allowedEntities = role.entities;
+  return escalations.filter(e => {
+    const source = (e.source || '').toLowerCase();
+    // Map escalation sources to entities
+    if (allowedEntities.includes('rdre') && (source.includes('seo') || source.includes('social') || source.includes('website'))) return true;
+    if (allowedEntities.includes('bvr') && (source.includes('bvr') || source.includes('hostaway'))) return true;
+    return false;
+  });
+}
+
+// ══════════════════════════════════════════
+//  TIME HELPERS
+// ══════════════════════════════════════════
+
 function timeAgo(isoStr) {
   if (!isoStr) return 'Never';
   const diff = (Date.now() - new Date(isoStr).getTime()) / 1000;
@@ -209,7 +511,10 @@ function formatTime(isoStr) {
   return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
-// ── Heartbeat ──
+// ══════════════════════════════════════════
+//  HEARTBEAT
+// ══════════════════════════════════════════
+
 function updateHeartbeat(data) {
   const hb = document.getElementById('heartbeat');
   const dot = document.getElementById('hb-dot');
@@ -220,7 +525,7 @@ function updateHeartbeat(data) {
     hb.className = 'hb hb-unknown';
     dot.style.background = 'var(--muted)';
     label.textContent = 'No Data';
-    detail.textContent = 'Could not load status.json — is the Mac Mini pushing to GitHub?';
+    detail.textContent = 'Could not load status.json';
     return;
   }
 
@@ -249,30 +554,68 @@ function updateHeartbeat(data) {
   }
 }
 
-// ── Summary stats ──
+// ══════════════════════════════════════════
+//  SUMMARY STATS
+// ══════════════════════════════════════════
+
 function updateSummary(data) {
   if (!data || !data.summary) return;
-  const s = data.summary;
-  document.getElementById('summary-stats').innerHTML = `
-    <div class="ms"><div class="v" style="color:var(--green)">${s.active_agents}</div><div class="l">Active</div></div>
-    <div class="ms"><div class="v" style="color:var(--yellow)">${s.blocked_agents}</div><div class="l">Blocked</div></div>
-    <div class="ms"><div class="v" style="color:var(--muted)">${s.disabled_agents}</div><div class="l">Disabled</div></div>
-    <div class="ms"><div class="v" style="color:var(--red)">${s.escalations}</div><div class="l">Escalations</div></div>
-  `;
+
+  const role = ROLES_CONFIG.roles[currentRole];
+
+  if (currentRole === 'admin') {
+    // Admin sees full stats
+    const s = data.summary;
+    document.getElementById('summary-stats').innerHTML = `
+      <div class="ms"><div class="v" style="color:var(--green)">${s.active_agents}</div><div class="l">Active</div></div>
+      <div class="ms"><div class="v" style="color:var(--yellow)">${s.blocked_agents}</div><div class="l">Blocked</div></div>
+      <div class="ms"><div class="v" style="color:var(--muted)">${s.disabled_agents}</div><div class="l">Disabled</div></div>
+      <div class="ms"><div class="v" style="color:var(--red)">${s.escalations}</div><div class="l">Escalations</div></div>
+    `;
+  } else if (currentRole === 'rdre-marketing') {
+    // Amanda sees approval-focused stats
+    const pending = (data.pending_approvals || []).length;
+    const agents = filterAgentsForRole(data.agents || []);
+    const activeAgents = agents.filter(a => a.status === 'running').length;
+    document.getElementById('summary-stats').innerHTML = `
+      <div class="ms"><div class="v" style="color:var(--yellow)">${pending}</div><div class="l">Pending</div></div>
+      <div class="ms"><div class="v" style="color:var(--green)">${activeAgents}</div><div class="l">Agents</div></div>
+      <div class="ms"><div class="v" style="color:var(--blue)">${agents.length}</div><div class="l">Your Agents</div></div>
+    `;
+  } else if (currentRole === 'bvr-va') {
+    // VAs see task-focused stats
+    const t = data.tasks || {};
+    document.getElementById('summary-stats').innerHTML = `
+      <div class="ms"><div class="v" style="color:var(--yellow)">${t.pending || 0}</div><div class="l">Open Tasks</div></div>
+      <div class="ms"><div class="v" style="color:var(--green)">${t.completed || 0}</div><div class="l">Done</div></div>
+      <div class="ms"><div class="v" style="color:var(--red)">${t.overdue || 0}</div><div class="l">Overdue</div></div>
+    `;
+  }
+
   document.getElementById('date-line').textContent = formatDate(data.generated_at) +
     ' \u2022 Updated ' + timeAgo(data.generated_at);
 }
 
-// ── Escalations ──
+// ══════════════════════════════════════════
+//  ESCALATIONS
+// ══════════════════════════════════════════
+
 function updateEscalations(data) {
   const section = document.getElementById('escalations-section');
   const list = document.getElementById('escalations-list');
-  if (!data || !data.escalations || data.escalations.length === 0) {
+  if (!data || !data.escalations) {
+    section.style.display = 'none';
+    return;
+  }
+
+  const filtered = currentRole === 'admin' ? data.escalations : filterEscalationsForRole(data.escalations);
+
+  if (filtered.length === 0) {
     section.style.display = 'none';
     return;
   }
   section.style.display = 'block';
-  list.innerHTML = data.escalations.map(e => `
+  list.innerHTML = filtered.map(e => `
     <div class="esc">
       <div class="esc-t">${escHtml(e.source || e.title || 'Alert')}</div>
       <div class="esc-d">Keyword: ${escHtml(e.keyword || e.detail || '')}</div>
@@ -280,14 +623,21 @@ function updateEscalations(data) {
   `).join('');
 }
 
-// ── Deadlines ──
+// ══════════════════════════════════════════
+//  DEADLINES
+// ══════════════════════════════════════════
+
 function updateDeadlines(data) {
   const el = document.getElementById('deadlines-list');
   if (!data || !data.deadlines || data.deadlines.length === 0) {
-    el.innerHTML = '<div style="font-size:.85rem;color:var(--muted);padding:12px 0">No upcoming deadlines found.</div>';
+    el.innerHTML = '<div style="font-size:.85rem;color:var(--muted);padding:12px 0">No upcoming deadlines.</div>';
     return;
   }
-  el.innerHTML = data.deadlines.map(d => {
+
+  // For non-admin roles, show a simplified view
+  const deadlines = currentRole === 'admin' ? data.deadlines : data.deadlines.slice(0, 3);
+
+  el.innerHTML = deadlines.map(d => {
     const color = d.severity === 'high' ? 'var(--red)' : d.severity === 'medium' ? 'var(--yellow)' : 'var(--muted)';
     const days = d.days_until;
     const label = days < 0 ? Math.abs(days) + 'd overdue' : days === 0 ? 'TODAY' : days + 'd';
@@ -298,7 +648,10 @@ function updateDeadlines(data) {
   }).join('');
 }
 
-// ── Tasks ──
+// ══════════════════════════════════════════
+//  TASKS
+// ══════════════════════════════════════════
+
 function updateTasks(data) {
   const el = document.getElementById('tasks-summary');
   if (!data || !data.tasks) {
@@ -318,7 +671,10 @@ function updateTasks(data) {
   `;
 }
 
-// ── Agents ──
+// ══════════════════════════════════════════
+//  AGENTS
+// ══════════════════════════════════════════
+
 function updateAgents(data) {
   const el = document.getElementById('agents-list');
   if (!data || !data.agents) {
@@ -326,7 +682,14 @@ function updateAgents(data) {
     return;
   }
 
-  el.innerHTML = data.agents.map(a => {
+  const agents = filterAgentsForRole(data.agents);
+
+  if (agents.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);padding:12px">No agents assigned to your role.</div>';
+    return;
+  }
+
+  el.innerHTML = agents.map(a => {
     const statusMap = {
       running: { badge: 'bg', label: 'Running', dot: 'dg', numBg: 'var(--gbg)', numColor: 'var(--green)' },
       next_up: { badge: 'by', label: 'Next Up', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
@@ -354,7 +717,87 @@ function updateAgents(data) {
   }).join('');
 }
 
-// ── System Health ──
+// ══════════════════════════════════════════
+//  APPROVALS (Amanda's primary interface)
+// ══════════════════════════════════════════
+
+function updateApprovals(data) {
+  const el = document.getElementById('approvals-list');
+
+  // Pending approvals come from status.json (generated by the Python script)
+  const approvals = data.pending_approvals || [];
+
+  if (approvals.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">&#10003;</div>
+        <div class="msg">All caught up!</div>
+        <div class="detail">No items waiting for your approval. Agents will notify you when something needs review.</div>
+      </div>
+    `;
+    return;
+  }
+
+  el.innerHTML = approvals.map((item, i) => `
+    <div class="approval-item">
+      <div class="ai-header">
+        <div class="ai-title">${escHtml(item.title || 'Pending Item')}</div>
+        <span class="badge by">${escHtml(item.agent || 'Agent')}</span>
+      </div>
+      <div class="ai-desc">${escHtml(item.description || '')}</div>
+      <div class="ai-actions">
+        <button class="btn btn-approve" onclick="handleApproval(${i}, 'approve')">Approve</button>
+        <button class="btn btn-reject" onclick="handleApproval(${i}, 'reject')">Reject</button>
+        <button class="btn btn-view" onclick="handleApproval(${i}, 'view')">View Details</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function handleApproval(index, action) {
+  // For now, show a message. When the backend approval system is built,
+  // this will write to logs/approvals/rdre-marketing/ via an API
+  const actions = { approve: 'Approved', reject: 'Rejected', view: 'Viewing' };
+  alert(actions[action] + ' — approval system backend coming soon. For now, text Sean or reply to the email.');
+}
+
+// ══════════════════════════════════════════
+//  VA TASKS
+// ══════════════════════════════════════════
+
+function updateVaTasks(data) {
+  const el = document.getElementById('va-tasks-list');
+
+  // VA tasks will come from status.json once we add entity-filtered tasks
+  const tasks = data.va_tasks || [];
+
+  if (tasks.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">&#128203;</div>
+        <div class="msg">No specific tasks assigned</div>
+        <div class="detail">Check Hostaway for guest messages and follow the BVR SOP for daily operations.</div>
+      </div>
+    `;
+    return;
+  }
+
+  el.innerHTML = tasks.map(t => {
+    const priorityColor = t.priority === 'high' ? 'var(--red)' : t.priority === 'medium' ? 'var(--yellow)' : 'var(--green)';
+    return `<div class="task-item">
+      <div style="display:flex;align-items:center">
+        <div class="task-priority" style="background:${priorityColor}"></div>
+        <span>${escHtml(t.text || t.title || 'Task')}</span>
+      </div>
+      <span class="badge ${t.priority === 'high' ? 'br' : t.priority === 'medium' ? 'by' : 'bg'}">${escHtml(t.priority || 'normal')}</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  SYSTEM HEALTH
+// ══════════════════════════════════════════
+
 function updateSystemHealth(data) {
   const el = document.getElementById('system-health');
   if (!data || !data.system_health) {
@@ -383,7 +826,10 @@ function updateSystemHealth(data) {
   }).join('');
 }
 
-// ── HTML escaping ──
+// ══════════════════════════════════════════
+//  HTML ESCAPING
+// ══════════════════════════════════════════
+
 function escHtml(str) {
   if (!str) return '';
   const d = document.createElement('div');
@@ -391,20 +837,33 @@ function escHtml(str) {
   return d.innerHTML;
 }
 
-// ── Load status ──
+// ══════════════════════════════════════════
+//  RENDER ALL
+// ══════════════════════════════════════════
+
+function renderAll(data) {
+  updateHeartbeat(data);
+  updateSummary(data);
+  updateEscalations(data);
+  updateDeadlines(data);
+  updateTasks(data);
+  updateAgents(data);
+  updateApprovals(data);
+  updateVaTasks(data);
+  updateSystemHealth(data);
+}
+
+// ══════════════════════════════════════════
+//  LOAD STATUS
+// ══════════════════════════════════════════
+
 async function loadStatus() {
   try {
     const resp = await fetch(STATUS_URL + '?t=' + Date.now());
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     currentData = await resp.json();
 
-    updateHeartbeat(currentData);
-    updateSummary(currentData);
-    updateEscalations(currentData);
-    updateDeadlines(currentData);
-    updateTasks(currentData);
-    updateAgents(currentData);
-    updateSystemHealth(currentData);
+    renderAll(currentData);
 
     document.getElementById('footer-ts').textContent =
       'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString();
@@ -415,7 +874,12 @@ async function loadStatus() {
   }
 }
 
-// Load immediately, then refresh every 5 minutes
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+
+detectRole();
+applyRole();
 loadStatus();
 setInterval(loadStatus, 5 * 60 * 1000);
 </script>
