@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-02-24T19:02:59.802065",
+  "generated_at": "2026-02-24T21:40:01.624591",
   "heartbeat": {
-    "timestamp": "2026-02-24T20:18:00.464244",
+    "timestamp": "2026-02-24T21:40:01.624591",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
     "active_agents": 1,
     "blocked_agents": 7,
     "disabled_agents": 6,
-    "escalations": 6,
-    "pending_tasks": 61,
-    "completed_tasks": 62,
+    "escalations": 7,
+    "pending_tasks": 66,
+    "completed_tasks": 63,
     "overdue_tasks": 6,
     "due_today": 4
   },
@@ -24,7 +24,7 @@
       "schedule": "every 30 minutes",
       "enabled": true,
       "wave": "1.1",
-      "last_log": "2026-02-24T18:47:31.796379",
+      "last_log": "2026-02-24T21:17:17.484643",
       "entities": [
         "all"
       ]
@@ -38,7 +38,7 @@
       "schedule": "every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM",
       "enabled": true,
       "wave": "1.3",
-      "last_log": "2026-02-24T18:47:17.767325",
+      "last_log": "2026-02-24T20:47:19.200243",
       "entities": [
         "bvr"
       ]
@@ -68,7 +68,7 @@
       "schedule": "every hour during business hours",
       "enabled": true,
       "wave": "2.1",
-      "last_log": "2026-02-24T15:24:57.082803",
+      "last_log": "2026-02-24T19:25:15.495383",
       "entities": [
         "rdre"
       ]
@@ -196,7 +196,7 @@
       "schedule": "Not configured",
       "enabled": false,
       "wave": "1.2",
-      "last_log": "2026-02-24T18:34:55.130613",
+      "last_log": "2026-02-24T21:39:35.972718",
       "entities": [
         "all"
       ]
@@ -223,10 +223,14 @@
     },
     {
       "source": "email-triage/triage-2026-02-24.md",
-      "keyword": "urgent"
+      "keyword": "error"
     },
     {
       "source": "crm/crm-check-2026-02-24-1524.md",
+      "keyword": "error"
+    },
+    {
+      "source": "crm/crm-check-2026-02-24-1925.md",
       "keyword": "error"
     },
     {
@@ -270,12 +274,12 @@
   ],
   "system_health": {
     "watchdog": {
-      "status": "ok",
+      "status": "warning",
       "detail": "Last check: 06:15 PM"
     },
     "auto_backup": {
       "status": "ok",
-      "detail": "Last: 07:02 PM"
+      "detail": "Last: 09:32 PM"
     },
     "morning_briefing": {
       "status": "ok",
@@ -283,16 +287,16 @@
     },
     "auto_merge": {
       "status": "warning",
-      "detail": "Last: 04:12 PM"
+      "detail": "Last: 08:13 PM"
     },
     "github_push": {
       "status": "ok",
-      "detail": "Last: 07:02 PM"
+      "detail": "Last: 09:32 PM"
     }
   },
   "tasks": {
-    "pending": 61,
-    "completed": 62,
+    "pending": 66,
+    "completed": 63,
     "overdue": 6,
     "due_today": 4
   },
@@ -447,7 +451,7 @@
           {
             "id": "rdre-website",
             "name": "WordPress Website Live",
-            "description": "Migrate from GHL website builder to WordPress for full design control",
+            "description": "WordPress site hosted within GHL (GHL's WordPress hosting). CMS is WordPress via GHL \u2014 not a separate WordPress install. GHL stays as the hosting platform.",
             "target_date": "2026-03-31",
             "progress": 0.6,
             "status": "on_track",
@@ -461,7 +465,7 @@
                 "done": true
               },
               {
-                "label": "Hosting selected",
+                "label": "WordPress deployed via GHL hosting",
                 "done": false
               },
               {

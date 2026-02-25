@@ -426,7 +426,12 @@ function getCfAccessEmail() {
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=');
       if (name === 'CF_Authorization' && value) {
-        const payload = JSON.parse(atob(value.split('.')[1]));
+        // JWT uses base64url encoding: replace - with + and _ with /
+        let b64 = value.split('.')[1];
+        b64 = b64.replace(/-/g, '+').replace(/_/g, '/');
+        // Pad to multiple of 4
+        while (b64.length % 4) b64 += '=';
+        const payload = JSON.parse(atob(b64));
         return payload.email || null;
       }
     }
@@ -1180,15 +1185,16 @@ function renderAll(data) {
 async function loadStatus() {
   let source = 'embedded';
   try {
-    // Try KV-backed API first (real-time)
     let data = null;
+
+    // Try KV-backed API first (real-time)
     try {
       const resp = await fetch('/api/sync?t=' + Date.now());
       if (resp.ok) {
         const text = await resp.text();
-        if (text.charAt(0) === '{') { data = JSON.parse(text); source = 'api'; }
+        if (text.length > 2 && text.charAt(0) === '{') { data = JSON.parse(text); source = 'api'; }
       }
-    } catch {}
+    } catch (e) { console.warn('API fetch failed:', e.message); }
 
     // Fall back to static file
     if (!data) {
@@ -1196,32 +1202,23 @@ async function loadStatus() {
         const resp = await fetch(STATUS_URL + '?t=' + Date.now());
         if (resp.ok) {
           const text = await resp.text();
-          if (text.charAt(0) === '{') { data = JSON.parse(text); source = 'static'; }
+          if (text.length > 2 && text.charAt(0) === '{') { data = JSON.parse(text); source = 'static'; }
         }
-      } catch {}
+      } catch (e) { console.warn('Static fetch failed:', e.message); }
     }
 
     // Final fallback: embedded data
-    if (!data) { data = EMBEDDED_STATUS; source = 'embedded'; }
+    if (!data && EMBEDDED_STATUS) { data = EMBEDDED_STATUS; source = 'embedded'; }
 
-    currentData = data;
-    renderAll(currentData);
-
-    const srcLabel = source === 'api' ? 'live' : source === 'static' ? 'file' : 'cached';
-    document.getElementById('footer-ts').textContent =
-      'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString() + ' (' + srcLabel + ')';
+    if (data) {
+      currentData = data;
+      renderAll(currentData);
+      const srcLabel = source === 'api' ? 'live' : source === 'static' ? 'file' : 'cached';
+      document.getElementById('footer-ts').textContent =
+        'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString() + ' (' + srcLabel + ')';
+    }
   } catch (err) {
     console.error('Failed to load status:', err);
-    // Even if everything fails, try embedded data
-    if (EMBEDDED_STATUS) {
-      currentData = EMBEDDED_STATUS;
-      renderAll(currentData);
-      document.getElementById('footer-ts').textContent =
-        'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString() + ' (cached)';
-    } else {
-      updateHeartbeat(null);
-      document.getElementById('date-line').textContent = 'Failed to load data \u2014 ' + err.message;
-    }
   }
 }
 
@@ -1229,8 +1226,19 @@ async function loadStatus() {
 //  INIT
 // ══════════════════════════════════════════
 
-detectRole();
-applyRole();
+// Immediately render embedded data so dashboard is never blank
+try {
+  detectRole();
+  applyRole();
+  if (EMBEDDED_STATUS) {
+    currentData = EMBEDDED_STATUS;
+    renderAll(currentData);
+    document.getElementById('footer-ts').textContent =
+      'McFarlin AI Agent System \u2022 Loaded from cache';
+  }
+} catch (e) { console.error('Init render error:', e); }
+
+// Then try to fetch fresh data (will overwrite embedded if successful)
 loadStatus();
 setInterval(loadStatus, 5 * 60 * 1000);
 </script>
