@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-02-24T13:56:32.962532",
   "heartbeat": {
-    "timestamp": "2026-02-24T13:56:32.962532",
+    "timestamp": "2026-02-24T18:48:00.416960",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
@@ -291,9 +291,12 @@
         "color": "#C8973E",
         "annual_target": "$400K net income",
         "annual_target_amount": 400000,
-        "team": ["Sean McFarlin", "Amanda McFarlin"],
+        "team": [
+          "Sean McFarlin",
+          "Amanda McFarlin"
+        ],
         "priority": 1,
-        "overall_progress": 0.30,
+        "overall_progress": 0.3,
         "status": "on_track",
         "summary": "Strategy complete. GHL automation built. First deal target: March 31.",
         "goals": [
@@ -302,13 +305,25 @@
             "name": "GHL Lead Intake Fully Automated",
             "description": "Tags, drip campaigns, auto-response all configured in GHL",
             "target_date": "2026-03-07",
-            "progress": 0.60,
+            "progress": 0.6,
             "status": "on_track",
             "milestones": [
-              {"label": "8 workflows built", "done": true},
-              {"label": "14 pipeline stages configured", "done": true},
-              {"label": "Auto-tagging live", "done": false},
-              {"label": "Drip campaigns active", "done": false}
+              {
+                "label": "8 workflows built",
+                "done": true
+              },
+              {
+                "label": "14 pipeline stages configured",
+                "done": true
+              },
+              {
+                "label": "Auto-tagging live",
+                "done": false
+              },
+              {
+                "label": "Drip campaigns active",
+                "done": false
+              }
             ]
           },
           {
@@ -319,10 +334,22 @@
             "progress": 1.0,
             "status": "complete",
             "milestones": [
-              {"label": "Lead flow design complete", "done": true},
-              {"label": "Skip tracing process documented", "done": true},
-              {"label": "Marketing playbook created", "done": true},
-              {"label": "30-90 day roadmap defined", "done": true}
+              {
+                "label": "Lead flow design complete",
+                "done": true
+              },
+              {
+                "label": "Skip tracing process documented",
+                "done": true
+              },
+              {
+                "label": "Marketing playbook created",
+                "done": true
+              },
+              {
+                "label": "30-90 day roadmap defined",
+                "done": true
+              }
             ]
           },
           {
@@ -333,10 +360,22 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "Marketing campaigns live", "done": false},
-              {"label": "First inbound leads", "done": false},
-              {"label": "Lead qualified", "done": false},
-              {"label": "Offer submitted", "done": false}
+              {
+                "label": "Marketing campaigns live",
+                "done": false
+              },
+              {
+                "label": "First inbound leads",
+                "done": false
+              },
+              {
+                "label": "Lead qualified",
+                "done": false
+              },
+              {
+                "label": "Offer submitted",
+                "done": false
+              }
             ]
           },
           {
@@ -344,13 +383,25 @@
             "name": "Amanda Fully Onboarded",
             "description": "Clear roles defined for marketing + showings",
             "target_date": "2026-02-28",
-            "progress": 0.70,
+            "progress": 0.7,
             "status": "on_track",
             "milestones": [
-              {"label": "Strategy session completed", "done": true},
-              {"label": "Marketing lead role defined", "done": true},
-              {"label": "GHL access configured", "done": true},
-              {"label": "Approval workflow live", "done": false}
+              {
+                "label": "Strategy session completed",
+                "done": true
+              },
+              {
+                "label": "Marketing lead role defined",
+                "done": true
+              },
+              {
+                "label": "GHL access configured",
+                "done": true
+              },
+              {
+                "label": "Approval workflow live",
+                "done": false
+              }
             ]
           },
           {
@@ -361,9 +412,18 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "Submission form designed", "done": false},
-              {"label": "Upload mechanism built", "done": false},
-              {"label": "Integrated with GHL pipeline", "done": false}
+              {
+                "label": "Submission form designed",
+                "done": false
+              },
+              {
+                "label": "Upload mechanism built",
+                "done": false
+              },
+              {
+                "label": "Integrated with GHL pipeline",
+                "done": false
+              }
             ]
           },
           {
@@ -371,13 +431,25 @@
             "name": "WordPress Website Live",
             "description": "Migrate from GHL website builder to WordPress for full design control",
             "target_date": "2026-03-31",
-            "progress": 0.60,
+            "progress": 0.6,
             "status": "on_track",
             "milestones": [
-              {"label": "7 pages designed on staging", "done": true},
-              {"label": "Design system finalized", "done": true},
-              {"label": "Hosting selected", "done": false},
-              {"label": "Go live with domain", "done": false}
+              {
+                "label": "7 pages designed on staging",
+                "done": true
+              },
+              {
+                "label": "Design system finalized",
+                "done": true
+              },
+              {
+                "label": "Hosting selected",
+                "done": false
+              },
+              {
+                "label": "Go live with domain",
+                "done": false
+              }
             ]
           }
         ]
@@ -389,9 +461,14 @@
         "color": "#3b82f6",
         "annual_target": "$240K net income",
         "annual_target_amount": 240000,
-        "team": ["Sean McFarlin", "Joshua (VA)", "Dee (VA)", "Kristine (VA)"],
+        "team": [
+          "Sean McFarlin",
+          "Joshua (VA)",
+          "Dee (VA)",
+          "Kristine (VA)"
+        ],
         "priority": 2,
-        "overall_progress": 0.20,
+        "overall_progress": 0.2,
         "status": "on_track",
         "summary": "Operations stable. VAs covering 24/7. API connected. Focus: occupancy and expense tracking.",
         "goals": [
@@ -400,12 +477,21 @@
             "name": "Hostaway API Connected & Pulling Data",
             "description": "Live property data flowing from Hostaway into agent system",
             "target_date": "2026-03-01",
-            "progress": 0.50,
+            "progress": 0.5,
             "status": "on_track",
             "milestones": [
-              {"label": "API key configured", "done": true},
-              {"label": "Agent 2 built with API integration", "done": true},
-              {"label": "Deployed and pulling live data", "done": false}
+              {
+                "label": "API key configured",
+                "done": true
+              },
+              {
+                "label": "Agent 2 built with API integration",
+                "done": true
+              },
+              {
+                "label": "Deployed and pulling live data",
+                "done": false
+              }
             ]
           },
           {
@@ -413,12 +499,21 @@
             "name": "All VAs Operating from Documented SOPs",
             "description": "Standard operating procedures documented and followed by all VAs",
             "target_date": "2026-03-15",
-            "progress": 0.70,
+            "progress": 0.7,
             "status": "on_track",
             "milestones": [
-              {"label": "BVR SOP reviewed and documented", "done": true},
-              {"label": "VA roles defined", "done": true},
-              {"label": "SOP compliance tracking", "done": false}
+              {
+                "label": "BVR SOP reviewed and documented",
+                "done": true
+              },
+              {
+                "label": "VA roles defined",
+                "done": true
+              },
+              {
+                "label": "SOP compliance tracking",
+                "done": false
+              }
             ]
           },
           {
@@ -429,9 +524,18 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "QuickBooks integration explored", "done": false},
-              {"label": "Expense categories defined", "done": false},
-              {"label": "Automated reporting", "done": false}
+              {
+                "label": "QuickBooks integration explored",
+                "done": false
+              },
+              {
+                "label": "Expense categories defined",
+                "done": false
+              },
+              {
+                "label": "Automated reporting",
+                "done": false
+              }
             ]
           },
           {
@@ -439,12 +543,21 @@
             "name": "Maintain 70%+ Occupancy",
             "description": "Consistent 70%+ occupancy across all ~30 listings",
             "target_date": "2026-12-31",
-            "progress": 0.50,
+            "progress": 0.5,
             "status": "on_track",
             "milestones": [
-              {"label": "PriceLabs pricing active", "done": true},
-              {"label": "Listing optimization", "done": false},
-              {"label": "Seasonal strategy defined", "done": false}
+              {
+                "label": "PriceLabs pricing active",
+                "done": true
+              },
+              {
+                "label": "Listing optimization",
+                "done": false
+              },
+              {
+                "label": "Seasonal strategy defined",
+                "done": false
+              }
             ]
           }
         ]
@@ -456,9 +569,11 @@
         "color": "#a855f7",
         "annual_target": "$100K net income",
         "annual_target_amount": 100000,
-        "team": ["Sean McFarlin"],
+        "team": [
+          "Sean McFarlin"
+        ],
         "priority": 4,
-        "overall_progress": 0.10,
+        "overall_progress": 0.1,
         "status": "on_track",
         "summary": "Active listing at 12014 Rainforest. Revenue flows from Real Deal and existing business.",
         "goals": [
@@ -467,13 +582,25 @@
             "name": "Close Current Listing",
             "description": "Close 12014 Rainforest sale (target mid-2026)",
             "target_date": "2026-06-30",
-            "progress": 0.20,
+            "progress": 0.2,
             "status": "on_track",
             "milestones": [
-              {"label": "Listed and active", "done": true},
-              {"label": "Showing inquiries handled", "done": true},
-              {"label": "Offer received", "done": false},
-              {"label": "Closed", "done": false}
+              {
+                "label": "Listed and active",
+                "done": true
+              },
+              {
+                "label": "Showing inquiries handled",
+                "done": true
+              },
+              {
+                "label": "Offer received",
+                "done": false
+              },
+              {
+                "label": "Closed",
+                "done": false
+              }
             ]
           },
           {
@@ -484,9 +611,18 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "Current listing closed", "done": false},
-              {"label": "Options researched", "done": false},
-              {"label": "Decision made", "done": false}
+              {
+                "label": "Current listing closed",
+                "done": false
+              },
+              {
+                "label": "Options researched",
+                "done": false
+              },
+              {
+                "label": "Decision made",
+                "done": false
+              }
             ]
           },
           {
@@ -497,8 +633,14 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "Revenue tracking system set up", "done": false},
-              {"label": "Monthly reporting", "done": false}
+              {
+                "label": "Revenue tracking system set up",
+                "done": false
+              },
+              {
+                "label": "Monthly reporting",
+                "done": false
+              }
             ]
           }
         ]
@@ -510,12 +652,18 @@
         "color": "#22c55e",
         "annual_target": "$240K-$290K combined net",
         "annual_target_amount": 265000,
-        "team": ["Sean McFarlin"],
+        "team": [
+          "Sean McFarlin"
+        ],
         "priority": 5,
         "overall_progress": 0.05,
         "status": "on_track",
         "summary": "Passive income entities. Monitor only. Average Jo, Montgomery Oak, ASH Homes.",
-        "entities": ["Average Jo Holdings", "Montgomery Oak", "ASH Homes"],
+        "entities": [
+          "Average Jo Holdings",
+          "Montgomery Oak",
+          "ASH Homes"
+        ],
         "goals": [
           {
             "id": "hold-quickbooks",
@@ -525,8 +673,14 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "QuickBooks API connected", "done": false},
-              {"label": "Entities reconciled", "done": false}
+              {
+                "label": "QuickBooks API connected",
+                "done": false
+              },
+              {
+                "label": "Entities reconciled",
+                "done": false
+              }
             ]
           },
           {
@@ -537,8 +691,14 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "Budget categories defined", "done": false},
-              {"label": "Monthly tracking active", "done": false}
+              {
+                "label": "Budget categories defined",
+                "done": false
+              },
+              {
+                "label": "Monthly tracking active",
+                "done": false
+              }
             ]
           },
           {
@@ -549,8 +709,14 @@
             "progress": 0.0,
             "status": "on_track",
             "milestones": [
-              {"label": "Performance comparison", "done": false},
-              {"label": "Decision made", "done": false}
+              {
+                "label": "Performance comparison",
+                "done": false
+              },
+              {
+                "label": "Decision made",
+                "done": false
+              }
             ]
           }
         ]
@@ -562,9 +728,11 @@
         "color": "#71717a",
         "annual_target": "Close out open items",
         "annual_target_amount": 0,
-        "team": ["Sean McFarlin"],
+        "team": [
+          "Sean McFarlin"
+        ],
         "priority": 6,
-        "overall_progress": 0.10,
+        "overall_progress": 0.1,
         "status": "on_track",
         "summary": "Not growing. Tracking 2 open items: wrap note sale and escrow overpayment.",
         "goals": [
@@ -573,12 +741,21 @@
             "name": "Wrap Note Sale Closing",
             "description": "Coordinate closing with Alamo Title + Provident Funding",
             "target_date": "2026-03-31",
-            "progress": 0.30,
+            "progress": 0.3,
             "status": "on_track",
             "milestones": [
-              {"label": "Payoff statement requested", "done": true},
-              {"label": "John Marshall follow-up (Feb 28)", "done": false},
-              {"label": "Closing coordinated", "done": false}
+              {
+                "label": "Payoff statement requested",
+                "done": true
+              },
+              {
+                "label": "John Marshall follow-up (Feb 28)",
+                "done": false
+              },
+              {
+                "label": "Closing coordinated",
+                "done": false
+              }
             ]
           },
           {
@@ -586,21 +763,40 @@
             "name": "Escrow Overpayment Credit",
             "description": "Receive $1,527.51 escrow overcharge credit from Provident",
             "target_date": "2026-03-06",
-            "progress": 0.20,
+            "progress": 0.2,
             "status": "at_risk",
             "milestones": [
-              {"label": "Formal escalation sent (Feb 21)", "done": true},
-              {"label": "Provident response by Mar 6", "done": false},
-              {"label": "Credit received", "done": false}
+              {
+                "label": "Formal escalation sent (Feb 21)",
+                "done": true
+              },
+              {
+                "label": "Provident response by Mar 6",
+                "done": false
+              },
+              {
+                "label": "Credit received",
+                "done": false
+              }
             ]
           }
         ]
       }
     },
     "role_visibility": {
-      "admin": ["rdre", "bvr", "mcfarlin-re", "holdings", "ridgeway"],
-      "rdre-marketing": ["rdre"],
-      "bvr-va": ["bvr"]
+      "admin": [
+        "rdre",
+        "bvr",
+        "mcfarlin-re",
+        "holdings",
+        "ridgeway"
+      ],
+      "rdre-marketing": [
+        "rdre"
+      ],
+      "bvr-va": [
+        "bvr"
+      ]
     }
   }
 }
