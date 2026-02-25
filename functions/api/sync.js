@@ -61,9 +61,21 @@ export async function onRequestGet(context) {
 
   // Return the latest status from KV (or fall back to static status.json)
   if (env.DASHBOARD_DATA) {
-    const data = await env.DASHBOARD_DATA.get("status");
-    if (data) {
-      return new Response(data, {
+    const raw = await env.DASHBOARD_DATA.get("status");
+    if (raw) {
+      // Inject server-side last_sync timestamp (always UTC) so the dashboard
+      // can detect staleness even if the heartbeat timestamp lacks timezone info
+      const lastSync = await env.DASHBOARD_DATA.get("last_sync");
+      let data;
+      try {
+        data = JSON.parse(raw);
+        if (lastSync) {
+          data._server_last_sync = lastSync;
+        }
+      } catch {
+        data = raw;
+      }
+      return new Response(typeof data === 'string' ? data : JSON.stringify(data), {
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-store",
