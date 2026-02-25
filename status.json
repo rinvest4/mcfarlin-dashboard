@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-02-24T21:40:01.624591",
+  "generated_at": "2026-02-25T07:39:18.499178",
   "heartbeat": {
-    "timestamp": "2026-02-24T21:40:01.624591",
+    "timestamp": "2026-02-25T07:39:18.499178",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
     "active_agents": 1,
     "blocked_agents": 7,
     "disabled_agents": 6,
-    "escalations": 7,
+    "escalations": 11,
     "pending_tasks": 66,
     "completed_tasks": 63,
-    "overdue_tasks": 6,
-    "due_today": 4
+    "overdue_tasks": 10,
+    "due_today": 1
   },
   "agents": [
     {
@@ -24,7 +24,7 @@
       "schedule": "every 30 minutes",
       "enabled": true,
       "wave": "1.1",
-      "last_log": "2026-02-24T21:17:17.484643",
+      "last_log": "2026-02-25T07:20:44.948329",
       "entities": [
         "all"
       ]
@@ -38,7 +38,7 @@
       "schedule": "every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM",
       "enabled": true,
       "wave": "1.3",
-      "last_log": "2026-02-24T20:47:19.200243",
+      "last_log": "2026-02-25T07:20:45.310646",
       "entities": [
         "bvr"
       ]
@@ -68,7 +68,7 @@
       "schedule": "every hour during business hours",
       "enabled": true,
       "wave": "2.1",
-      "last_log": "2026-02-24T19:25:15.495383",
+      "last_log": "2026-02-25T07:26:22.903582",
       "entities": [
         "rdre"
       ]
@@ -82,7 +82,7 @@
       "schedule": "daily at 7 AM, monthly deep on 1st",
       "enabled": true,
       "wave": "2.2",
-      "last_log": "2026-02-24T07:00:15.875585",
+      "last_log": "2026-02-25T07:00:26.177655",
       "entities": [
         "all"
       ]
@@ -168,7 +168,7 @@
       "schedule": "continuous + weekly deep Sundays",
       "enabled": false,
       "wave": "4",
-      "last_log": "2026-02-24T05:00:20.046086",
+      "last_log": "2026-02-25T05:00:20.027528",
       "entities": [
         "all"
       ]
@@ -182,7 +182,7 @@
       "schedule": "daily at 6 AM, weekly Sundays, real-time engagement",
       "enabled": true,
       "wave": "3",
-      "last_log": "2026-02-24T06:00:53.701560",
+      "last_log": "2026-02-25T06:00:22.287143",
       "entities": [
         "rdre"
       ]
@@ -196,7 +196,7 @@
       "schedule": "Not configured",
       "enabled": false,
       "wave": "1.2",
-      "last_log": "2026-02-24T21:39:35.972718",
+      "last_log": "2026-02-25T07:22:06.491214",
       "entities": [
         "all"
       ]
@@ -218,7 +218,11 @@
   ],
   "escalations": [
     {
-      "source": "security/security-check-2026-02-24-0500.md",
+      "source": "financial/financial-daily-2026-02-25.md",
+      "keyword": "urgent"
+    },
+    {
+      "source": "security/security-check-2026-02-25-0500.md",
       "keyword": "error"
     },
     {
@@ -226,7 +230,23 @@
       "keyword": "error"
     },
     {
+      "source": "email-triage/triage-2026-02-25.md",
+      "keyword": "error"
+    },
+    {
+      "source": "crm/crm-check-2026-02-25-0726.md",
+      "keyword": "error"
+    },
+    {
       "source": "crm/crm-check-2026-02-24-1524.md",
+      "keyword": "error"
+    },
+    {
+      "source": "crm/crm-check-2026-02-25-0325.md",
+      "keyword": "error"
+    },
+    {
+      "source": "crm/crm-check-2026-02-24-2325.md",
       "keyword": "error"
     },
     {
@@ -234,15 +254,11 @@
       "keyword": "error"
     },
     {
-      "source": "crm/crm-check-2026-02-24-0323.md",
-      "keyword": "error"
-    },
-    {
-      "source": "crm/crm-check-2026-02-24-0724.md",
-      "keyword": "error"
-    },
-    {
       "source": "crm/crm-check-2026-02-24-1124.md",
+      "keyword": "error"
+    },
+    {
+      "source": "content/content-daily-2026-02-25.md",
       "keyword": "error"
     }
   ],
@@ -250,55 +266,55 @@
     {
       "text": "Follow up with Provident Loan Servicing if no response to Feb 21 formal escalation \u2014 by March 6. Rem",
       "date": "2026-02-21",
-      "days_until": -3,
+      "days_until": -4,
       "severity": "high"
     },
     {
       "text": "Follow up with John Marshall (JM Investment Trust / JM Partners LLC) if payoff statement not receive",
       "date": "2026-02-28",
-      "days_until": 4,
+      "days_until": 3,
       "severity": "high"
     },
     {
       "text": "If Provident misses March 6 deadline: escalate \u2014 consider regulatory complaint or legal counsel",
       "date": "2026-03-06",
-      "days_until": 10,
+      "days_until": 9,
       "severity": "medium"
     },
     {
       "text": "**SEARCH ALL EMAIL ACCOUNTS for tax extension confirmations** \u2014 5-6 entities need March 15 filings. ",
       "date": "2026-03-15",
-      "days_until": 19,
+      "days_until": 18,
       "severity": "medium"
     }
   ],
   "system_health": {
     "watchdog": {
       "status": "warning",
-      "detail": "Last check: 06:15 PM"
+      "detail": "Last check: 06:02 AM"
     },
     "auto_backup": {
       "status": "ok",
-      "detail": "Last: 09:32 PM"
+      "detail": "Last: 07:35 AM"
     },
     "morning_briefing": {
       "status": "ok",
-      "detail": "Sent at 06:47 PM"
+      "detail": "Sent at 07:00 AM"
     },
     "auto_merge": {
-      "status": "warning",
-      "detail": "Last: 08:13 PM"
+      "status": "ok",
+      "detail": "Last: 07:35 AM"
     },
     "github_push": {
       "status": "ok",
-      "detail": "Last: 09:32 PM"
+      "detail": "Last: 07:35 AM"
     }
   },
   "tasks": {
     "pending": 66,
     "completed": 63,
-    "overdue": 6,
-    "due_today": 4
+    "overdue": 10,
+    "due_today": 1
   },
   "pending_approvals": [],
   "company_goals": {
