@@ -24,9 +24,8 @@ export async function onRequestPost(context) {
 
   // Only allow known approvers
   const ALLOWED_APPROVERS = [
-    "sean@mcfarlin.com",
-    "amanda@mcfarlin.com",
     "rinvest4@gmail.com",
+    "amandalastudios@gmail.com",
   ];
   if (!ALLOWED_APPROVERS.includes(email.toLowerCase())) {
     return json({ error: "Forbidden — not an authorized approver" }, 403);
