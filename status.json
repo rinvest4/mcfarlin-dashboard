@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-02-25T07:39:18.499178",
+  "generated_at": "2026-02-25T08:30:01.358546",
   "heartbeat": {
-    "timestamp": "2026-02-25T07:39:18.499178",
+    "timestamp": "2026-02-25T08:30:01.358546",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
@@ -9,7 +9,7 @@
     "blocked_agents": 7,
     "disabled_agents": 6,
     "escalations": 11,
-    "pending_tasks": 66,
+    "pending_tasks": 69,
     "completed_tasks": 63,
     "overdue_tasks": 10,
     "due_today": 1
@@ -24,7 +24,7 @@
       "schedule": "every 30 minutes",
       "enabled": true,
       "wave": "1.1",
-      "last_log": "2026-02-25T07:20:44.948329",
+      "last_log": "2026-02-25T08:30:01.316557",
       "entities": [
         "all"
       ]
@@ -38,7 +38,7 @@
       "schedule": "every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM",
       "enabled": true,
       "wave": "1.3",
-      "last_log": "2026-02-25T07:20:45.310646",
+      "last_log": "2026-02-25T08:30:01.340146",
       "entities": [
         "bvr"
       ]
@@ -196,7 +196,7 @@
       "schedule": "Not configured",
       "enabled": false,
       "wave": "1.2",
-      "last_log": "2026-02-25T07:22:06.491214",
+      "last_log": "2026-02-25T08:23:54.999887",
       "entities": [
         "all"
       ]
@@ -295,7 +295,7 @@
     },
     "auto_backup": {
       "status": "ok",
-      "detail": "Last: 07:35 AM"
+      "detail": "Last: 08:15 AM"
     },
     "morning_briefing": {
       "status": "ok",
@@ -303,15 +303,15 @@
     },
     "auto_merge": {
       "status": "ok",
-      "detail": "Last: 07:35 AM"
+      "detail": "Last: 08:25 AM"
     },
     "github_push": {
       "status": "ok",
-      "detail": "Last: 07:35 AM"
+      "detail": "Last: 08:15 AM"
     }
   },
   "tasks": {
-    "pending": 66,
+    "pending": 69,
     "completed": 63,
     "overdue": 10,
     "due_today": 1
