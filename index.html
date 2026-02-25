@@ -117,6 +117,53 @@
   .task-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:.85rem}
   .task-item:last-child{border-bottom:none}
   .task-priority{width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0}
+
+  /* Company cards (Goals tab) */
+  .company-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+  .company-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+  .company-card-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+  .company-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+  .company-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+  .company-card-info{flex:1;min-width:0;margin-left:12px}
+  .company-card-name{font-size:1rem;font-weight:700;margin-bottom:2px}
+  .company-card-target{font-size:.75rem;color:var(--muted)}
+  .company-card-summary{font-size:.8rem;color:var(--muted);margin-bottom:12px;line-height:1.4}
+  .company-card-stats{display:flex;gap:16px;margin-bottom:12px}
+  .company-card-stat{text-align:center}
+  .company-card-stat .v{font-size:1.1rem;font-weight:700}
+  .company-card-stat .l{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .company-card-progress{margin-top:4px}
+  .company-card-progress .pb{height:8px;margin-top:0}
+  .company-card-progress-label{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:6px}
+
+  /* Goal detail view */
+  .goal-detail{display:none}
+  .goal-detail.active{display:block}
+  .goal-back{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--blue);cursor:pointer;margin-bottom:16px;padding:6px 12px;border-radius:8px;transition:background .15s}
+  .goal-back:hover{background:var(--bbg)}
+  .goal-company-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+  .goal-company-title{font-size:1.3rem;font-weight:700}
+  .goal-company-meta{font-size:.8rem;color:var(--muted)}
+  .goal-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
+  .goal-item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px}
+  .goal-item-name{font-size:.9rem;font-weight:600}
+  .goal-item-desc{font-size:.8rem;color:var(--muted);margin-bottom:10px}
+  .goal-item-date{font-size:.72rem;color:var(--muted)}
+  .goal-item .pb{height:8px;margin-top:0;margin-bottom:8px}
+  .goal-milestones{display:flex;flex-direction:column;gap:4px}
+  .goal-milestone{display:flex;align-items:center;gap:8px;font-size:.8rem;padding:3px 0}
+  .goal-milestone-check{width:16px;height:16px;border-radius:4px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem}
+  .goal-milestone-check.done{background:var(--gbg);border-color:var(--green);color:var(--green)}
+  .goal-milestone-label{color:var(--muted)}
+  .goal-milestone-label.done{color:var(--text);text-decoration:line-through;opacity:.6}
+
+  /* Annual target bar */
+  .annual-target{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+  .annual-target-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .annual-target-title{font-size:1rem;font-weight:700}
+  .annual-target-amount{font-size:1.4rem;font-weight:700}
+  .annual-target .pb{height:10px;margin:0}
+  .annual-target-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:.75rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -154,6 +201,7 @@
 <!-- TABS -->
 <div class="tabs" id="tabs-container">
   <div class="tab active" data-tab="overview" onclick="showTab('overview')">Overview</div>
+  <div class="tab" data-tab="goals" onclick="showTab('goals')">Goals</div>
   <div class="tab" data-tab="agents" onclick="showTab('agents')">Agents</div>
   <div class="tab" data-tab="approvals" onclick="showTab('approvals')">Approvals</div>
   <div class="tab" data-tab="tasks" onclick="showTab('tasks')">Tasks</div>
@@ -180,6 +228,26 @@
         <div class="loading"><div class="loading-spin"></div><br>Loading...</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- GOALS TAB -->
+<div class="tab-content" id="tab-goals">
+  <!-- Company overview (default view) -->
+  <div id="goals-overview">
+    <div class="section">
+      <div class="sec-t">Company Goals &mdash; Q1 2026</div>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Click a company to see detailed goals and progress.</p>
+    </div>
+    <div class="grid g2" id="company-cards">
+      <div class="loading"><div class="loading-spin"></div><br>Loading goals...</div>
+    </div>
+  </div>
+
+  <!-- Company detail view (shown when clicking a company) -->
+  <div class="goal-detail" id="goals-detail">
+    <div class="goal-back" onclick="showGoalsOverview()">&larr; All Companies</div>
+    <div id="goal-detail-content"></div>
   </div>
 </div>
 
@@ -262,7 +330,7 @@ const ROLES_CONFIG = {
       label: 'Sean (Admin)',
       entities: 'all',
       agents: 'all',
-      sections: ['overview', 'agents', 'system', 'approvals', 'tasks'],
+      sections: ['overview', 'goals', 'agents', 'system', 'approvals', 'tasks'],
       can_switch_roles: true,
       title: 'McFarlin Operations'
     },
@@ -270,7 +338,7 @@ const ROLES_CONFIG = {
       label: 'Amanda (RDRE)',
       entities: ['rdre'],
       agents: [3, 7, 12],
-      sections: ['approvals', 'overview'],
+      sections: ['goals', 'approvals', 'overview'],
       can_switch_roles: false,
       title: 'RDRE Marketing Dashboard'
     },
@@ -875,10 +943,222 @@ function escHtml(str) {
 }
 
 // ══════════════════════════════════════════
+//  GOALS — Company Cards + Detail Drill-down
+// ══════════════════════════════════════════
+
+const COMPANY_ICONS = {
+  house: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  palmtree: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4"/><path d="M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-4"/><path d="M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 4.24-4.24c1.96 1.96 1.8 5.28-.35 7.43"/><path d="M12 20v-6"/></svg>',
+  building: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>',
+  briefcase: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  clipboard: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>'
+};
+
+let goalsData = null;
+
+function loadGoalsData(statusData) {
+  // Goals come from status.json (generated by Python script which reads company-goals.json)
+  if (statusData && statusData.company_goals) {
+    goalsData = statusData.company_goals;
+  }
+}
+
+function getVisibleCompanies() {
+  if (!goalsData || !goalsData.companies) return [];
+  const role = ROLES_CONFIG.roles[currentRole];
+  const roleVisibility = goalsData.role_visibility || {};
+  const allowedKeys = roleVisibility[currentRole] || Object.keys(goalsData.companies);
+  return allowedKeys
+    .filter(key => goalsData.companies[key])
+    .map(key => ({ key, ...goalsData.companies[key] }));
+}
+
+function statusBadge(status) {
+  const map = {
+    on_track: { cls: 'bg', label: 'On Track' },
+    at_risk: { cls: 'by', label: 'At Risk' },
+    behind: { cls: 'br', label: 'Behind' },
+    complete: { cls: 'bp', label: 'Complete' },
+  };
+  const s = map[status] || map.on_track;
+  return `<span class="badge ${s.cls}">${s.label}</span>`;
+}
+
+function progressColor(progress) {
+  if (progress >= 0.7) return 'var(--green)';
+  if (progress >= 0.4) return 'var(--blue)';
+  if (progress >= 0.2) return 'var(--yellow)';
+  return 'var(--muted)';
+}
+
+function updateGoals() {
+  const el = document.getElementById('company-cards');
+  const companies = getVisibleCompanies();
+
+  if (companies.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="msg">No goals data available yet.</div>
+        <div class="detail">Goals will appear here once the status generator includes company goal data.</div>
+      </div>
+    `;
+    return;
+  }
+
+  el.innerHTML = companies.map(c => {
+    const pct = Math.round((c.overall_progress || 0) * 100);
+    const goals = c.goals || [];
+    const completedGoals = goals.filter(g => g.status === 'complete').length;
+    const icon = COMPANY_ICONS[c.icon] || COMPANY_ICONS.briefcase;
+    const color = c.color || 'var(--blue)';
+
+    return `
+      <div class="company-card" onclick="showCompanyDetail('${c.key}')">
+        <div class="company-card-accent" style="background:${color}"></div>
+        <div class="company-card-header">
+          <div class="company-card-icon" style="background:${color}22;color:${color}">${icon}</div>
+          <div class="company-card-info">
+            <div class="company-card-name">${escHtml(c.short_name || c.name)}</div>
+            <div class="company-card-target">${escHtml(c.annual_target)}</div>
+          </div>
+          ${statusBadge(c.status)}
+        </div>
+        <div class="company-card-summary">${escHtml(c.summary)}</div>
+        <div class="company-card-stats">
+          <div class="company-card-stat">
+            <div class="v" style="color:${color}">${goals.length}</div>
+            <div class="l">Goals</div>
+          </div>
+          <div class="company-card-stat">
+            <div class="v" style="color:var(--green)">${completedGoals}</div>
+            <div class="l">Done</div>
+          </div>
+          <div class="company-card-stat">
+            <div class="v">${pct}%</div>
+            <div class="l">Progress</div>
+          </div>
+        </div>
+        <div class="company-card-progress">
+          <div class="pb"><div class="pf" style="width:${pct}%;background:${color}"></div></div>
+          <div class="company-card-progress-label">
+            <span>P${c.priority || ''}</span>
+            <span>${pct}% overall</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function showCompanyDetail(companyKey) {
+  if (!goalsData || !goalsData.companies[companyKey]) return;
+
+  const c = goalsData.companies[companyKey];
+  const overview = document.getElementById('goals-overview');
+  const detail = document.getElementById('goals-detail');
+  const content = document.getElementById('goal-detail-content');
+
+  const pct = Math.round((c.overall_progress || 0) * 100);
+  const color = c.color || 'var(--blue)';
+  const icon = COMPANY_ICONS[c.icon] || COMPANY_ICONS.briefcase;
+  const goals = c.goals || [];
+
+  let html = `
+    <div class="goal-company-header">
+      <div class="company-card-icon" style="background:${color}22;color:${color};width:48px;height:48px;font-size:1.4rem">${icon}</div>
+      <div>
+        <div class="goal-company-title">${escHtml(c.name)}</div>
+        <div class="goal-company-meta">${escHtml(c.annual_target)} &bull; ${escHtml(c.summary)}</div>
+      </div>
+    </div>
+  `;
+
+  // Annual target progress bar
+  if (c.annual_target_amount > 0) {
+    html += `
+      <div class="annual-target">
+        <div class="annual-target-header">
+          <div class="annual-target-title">Annual Target</div>
+          <div class="annual-target-amount" style="color:${color}">${escHtml(c.annual_target)}</div>
+        </div>
+        <div class="pb" style="height:10px"><div class="pf" style="width:${pct}%;background:${color}"></div></div>
+        <div class="annual-target-labels">
+          <span>${pct}% progress</span>
+          <span>${escHtml(c.annual_target)}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // Team
+  if (c.team && c.team.length > 0) {
+    html += `<div style="margin-bottom:16px;font-size:.8rem;color:var(--muted)">Team: ${c.team.map(t => escHtml(t)).join(', ')}</div>`;
+  }
+
+  // Goals list
+  html += `<div class="sec-t" style="font-size:1rem">Goals (${goals.length})</div>`;
+
+  goals.forEach(g => {
+    const gPct = Math.round((g.progress || 0) * 100);
+    const milestones = g.milestones || [];
+    const doneMilestones = milestones.filter(m => m.done).length;
+    const targetDate = g.target_date ? new Date(g.target_date + 'T00:00:00') : null;
+    const daysLeft = targetDate ? Math.ceil((targetDate - new Date()) / 86400000) : null;
+    let dateLabel = '';
+    if (daysLeft !== null) {
+      if (daysLeft < 0) dateLabel = Math.abs(daysLeft) + 'd overdue';
+      else if (daysLeft === 0) dateLabel = 'Due today';
+      else dateLabel = daysLeft + 'd left';
+    }
+    const dateSeverity = daysLeft !== null && daysLeft < 0 ? 'br' : daysLeft !== null && daysLeft <= 7 ? 'by' : 'bb';
+
+    html += `
+      <div class="goal-item">
+        <div class="goal-item-header">
+          <div>
+            <div class="goal-item-name">${escHtml(g.name)}</div>
+            <div class="goal-item-desc">${escHtml(g.description)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+            ${statusBadge(g.status)}
+            ${dateLabel ? `<span class="badge ${dateSeverity}">${dateLabel}</span>` : ''}
+          </div>
+        </div>
+        <div class="pb"><div class="pf" style="width:${gPct}%;background:${progressColor(g.progress)}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:10px;margin-top:4px">
+          <span>${gPct}% complete</span>
+          <span>${doneMilestones}/${milestones.length} milestones</span>
+        </div>
+        ${milestones.length > 0 ? `
+          <div class="goal-milestones">
+            ${milestones.map(m => `
+              <div class="goal-milestone">
+                <div class="goal-milestone-check ${m.done ? 'done' : ''}">${m.done ? '&#10003;' : ''}</div>
+                <span class="goal-milestone-label ${m.done ? 'done' : ''}">${escHtml(m.label)}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  });
+
+  content.innerHTML = html;
+  overview.style.display = 'none';
+  detail.classList.add('active');
+}
+
+function showGoalsOverview() {
+  document.getElementById('goals-overview').style.display = '';
+  document.getElementById('goals-detail').classList.remove('active');
+}
+
+// ══════════════════════════════════════════
 //  RENDER ALL
 // ══════════════════════════════════════════
 
 function renderAll(data) {
+  loadGoalsData(data);
   updateHeartbeat(data);
   updateSummary(data);
   updateEscalations(data);
@@ -888,6 +1168,7 @@ function renderAll(data) {
   updateApprovals(data);
   updateVaTasks(data);
   updateSystemHealth(data);
+  updateGoals();
 }
 
 // ══════════════════════════════════════════
