@@ -1,18 +1,59 @@
 {
-  "generated_at": "2026-02-25T19:31:25.815522",
+  "generated_at": "2026-02-26T01:36:15.973838",
   "heartbeat": {
-    "timestamp": "2026-02-25T19:31:25.815522",
+    "timestamp": "2026-02-26T01:36:15.973838",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
     "active_agents": 1,
-    "blocked_agents": 7,
-    "disabled_agents": 6,
+    "in_training": 2,
+    "not_started": 11,
+    "avg_autonomy_pct": 5,
     "escalations": 9,
-    "pending_tasks": 68,
-    "completed_tasks": 66,
+    "pending_tasks": 63,
+    "completed_tasks": 65,
     "overdue_tasks": 10,
     "due_today": 1
+  },
+  "autonomy_stages": {
+    "not_started": {
+      "label": "Not Started",
+      "color": "#71717a",
+      "description": "Code built, not yet deployed or configured for live use"
+    },
+    "deployed": {
+      "label": "Deployed",
+      "color": "#3b82f6",
+      "description": "Running on Mac Mini, initial setup complete, not yet handling real tasks"
+    },
+    "in_training": {
+      "label": "In Training",
+      "color": "#eab308",
+      "description": "Active and processing real data. Sean is teaching patterns, preferences, and edge cases"
+    },
+    "supervised": {
+      "label": "Supervised",
+      "color": "#f97316",
+      "description": "Makes recommendations and drafts actions. All outputs require human approval before execution"
+    },
+    "semi_autonomous": {
+      "label": "Semi-Autonomous",
+      "color": "#a855f7",
+      "description": "Handles routine tasks independently. Escalates edge cases and high-stakes decisions to Sean"
+    },
+    "autonomous": {
+      "label": "Autonomous",
+      "color": "#22c55e",
+      "description": "Fully operational within its domain. Only escalates true exceptions or policy violations"
+    }
+  },
+  "autonomy_stage_counts": {
+    "autonomous": 0,
+    "semi_autonomous": 0,
+    "supervised": 1,
+    "in_training": 1,
+    "deployed": 1,
+    "not_started": 11
   },
   "agents": [
     {
@@ -24,28 +65,164 @@
       "schedule": "every 30 minutes",
       "enabled": true,
       "wave": "1.1",
-      "last_log": "2026-02-25T19:31:25.791222",
+      "last_log": "2026-02-26T01:33:23.328233",
       "entities": [
         "all"
-      ]
+      ],
+      "autonomy_stage": "supervised",
+      "autonomy_stage_label": "Supervised",
+      "autonomy_stage_color": "#f97316",
+      "autonomy_pct": 40,
+      "deployed_date": "2026-02-20",
+      "next_milestone": "Reduce false-positive escalations, improve daily summary quality",
+      "blockers": [],
+      "notes": "Running every 30 min. Reads all agent feedback, generates daily summaries. Needs more tuning on escalation sensitivity and prioritization logic."
+    },
+    {
+      "key": "email_triage",
+      "number": 2,
+      "name": "Email Triage",
+      "role": "5 Gmail accounts",
+      "status": "disabled",
+      "schedule": "Not configured",
+      "enabled": false,
+      "wave": "1.2",
+      "last_log": "2026-02-26T01:24:22.039134",
+      "entities": [
+        "all"
+      ],
+      "autonomy_stage": "in_training",
+      "autonomy_stage_label": "In Training",
+      "autonomy_stage_color": "#eab308",
+      "autonomy_pct": 20,
+      "deployed_date": "2026-02-25",
+      "next_milestone": "Train on priority rules for each account, establish auto-label categories",
+      "blockers": [],
+      "notes": "Just went live. Scanning 5 Gmail accounts. Needs Sean to train on priority classifications, what to flag vs ignore, and response drafting preferences."
     },
     {
       "key": "bvr_operations",
-      "number": 2,
+      "number": 3,
       "name": "BVR Operations",
       "role": "Hostaway + Revenue",
       "status": "next_up",
       "schedule": "every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM",
       "enabled": true,
       "wave": "1.3",
-      "last_log": "2026-02-25T18:01:26.521054",
+      "last_log": "2026-02-26T00:01:26.521054",
       "entities": [
         "bvr"
-      ]
+      ],
+      "autonomy_stage": "deployed",
+      "autonomy_stage_label": "Deployed",
+      "autonomy_stage_color": "#3b82f6",
+      "autonomy_pct": 10,
+      "deployed_date": null,
+      "next_milestone": "Deploy via launchd, run first live monitoring cycle, tune revenue goal thresholds",
+      "blockers": [
+        "Needs setup-autostart.sh run on Mac Mini"
+      ],
+      "notes": "Hostaway API integrated. Script built and tested. Needs Mac Mini launchd setup and initial calibration run."
+    },
+    {
+      "key": "lead_crm",
+      "number": 4,
+      "name": "Lead & CRM",
+      "role": "GHL + Pipedrive",
+      "status": "wave2",
+      "schedule": "every hour during business hours",
+      "enabled": true,
+      "wave": "2.1",
+      "last_log": "2026-02-26T00:01:38.889873",
+      "entities": [
+        "rdre"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy and begin lead intake monitoring, train on response style",
+      "blockers": [
+        "Depends on BVR Operations being stable first"
+      ],
+      "notes": "GHL and Pipedrive API keys configured. Draft-only mode. Pipedrive being phased out Q2 2026."
+    },
+    {
+      "key": "financial_oversight",
+      "number": 5,
+      "name": "Financial Oversight",
+      "role": "6 entities",
+      "status": "wave2",
+      "schedule": "daily at 7 AM, monthly deep on 1st",
+      "enabled": true,
+      "wave": "2.2",
+      "last_log": "2026-02-25T13:00:26.177655",
+      "entities": [
+        "all"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Connect to financial data sources, establish baseline reporting",
+      "blockers": [
+        "Needs QuickBooks or bank API access for real data"
+      ],
+      "notes": "Monitors 6 entities. View-only mode. Needs bank/accounting API connections for real data."
+    },
+    {
+      "key": "bookkeeper",
+      "number": 6,
+      "name": "Bookkeeper & Accounting",
+      "role": "7 entities, QuickBooks",
+      "status": "disabled",
+      "schedule": "daily at 11 PM, weekly close Sundays, monthly close 1st",
+      "enabled": false,
+      "wave": "3",
+      "last_log": null,
+      "entities": [
+        "all"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Get QuickBooks OAuth2 API credentials from Intuit Developer portal",
+      "blockers": [
+        "QuickBooks API connection (Intuit Developer OAuth 2.0)"
+      ],
+      "notes": "7 entities, QuickBooks integration required. Would replace Joshua VA's manual data entry."
+    },
+    {
+      "key": "bvr_property_listing",
+      "number": 7,
+      "name": "BVR Property & Listing",
+      "role": "Listing management",
+      "status": "wave4",
+      "schedule": "daily at 8 AM",
+      "enabled": true,
+      "wave": "4",
+      "last_log": null,
+      "entities": [
+        "bvr"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy after BVR Operations is stable, train on listing optimization preferences",
+      "blockers": [
+        "BVR Operations must be in_training or higher"
+      ],
+      "notes": "Listing management via Hostaway. Builds on BVR Operations agent data."
     },
     {
       "key": "seo_marketing",
-      "number": 3,
+      "number": 8,
       "name": "SEO & Marketing",
       "role": "3 sites",
       "status": "wave3",
@@ -57,53 +234,21 @@
         "rdre",
         "bvr",
         "personal"
-      ]
-    },
-    {
-      "key": "lead_crm",
-      "number": 4,
-      "name": "Lead & CRM",
-      "role": "GHL + Pipedrive",
-      "status": "wave2",
-      "schedule": "every hour during business hours",
-      "enabled": true,
-      "wave": "2.1",
-      "last_log": "2026-02-25T18:01:38.889873",
-      "entities": [
-        "rdre"
-      ]
-    },
-    {
-      "key": "financial_oversight",
-      "number": 5,
-      "name": "Financial Oversight",
-      "role": "6 entities",
-      "status": "wave2",
-      "schedule": "daily at 7 AM, monthly deep on 1st",
-      "enabled": true,
-      "wave": "2.2",
-      "last_log": "2026-02-25T07:00:26.177655",
-      "entities": [
-        "all"
-      ]
-    },
-    {
-      "key": "bvr_property_listing",
-      "number": 6,
-      "name": "BVR Property & Listing",
-      "role": "Listing management",
-      "status": "wave4",
-      "schedule": "daily at 8 AM",
-      "enabled": true,
-      "wave": "4",
-      "last_log": null,
-      "entities": [
-        "bvr"
-      ]
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy site monitoring, establish SEO baseline metrics",
+      "blockers": [
+        "Amanda approval gate for RDRE content"
+      ],
+      "notes": "Covers 3 sites. RDRE changes require Amanda approval (Standing Order #40)."
     },
     {
       "key": "website_content",
-      "number": 7,
+      "number": 9,
       "name": "Website & Content",
       "role": "Site monitoring",
       "status": "wave3",
@@ -115,49 +260,39 @@
         "rdre",
         "bvr",
         "personal"
-      ]
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy uptime/content monitoring, train on content standards",
+      "blockers": [],
+      "notes": "Site monitoring and content management. Works with SEO agent."
     },
     {
-      "key": "contracts_legal",
-      "number": 8,
-      "name": "Contracts & Legal",
-      "role": "Document review",
-      "status": "disabled",
-      "schedule": "on-demand + weekly Fridays + monthly 1st",
-      "enabled": false,
-      "wave": "4",
-      "last_log": null,
-      "entities": [
-        "all"
-      ]
-    },
-    {
-      "key": "process_improvement",
-      "number": 9,
-      "name": "Process Improvement",
-      "role": "SOP optimization",
-      "status": "disabled",
-      "schedule": "weekly Sundays, continuous monitoring",
-      "enabled": false,
-      "wave": "4",
-      "last_log": null,
-      "entities": [
-        "all"
-      ]
-    },
-    {
-      "key": "purchasing",
+      "key": "social_media",
       "number": 10,
-      "name": "Purchasing",
-      "role": "Supply management",
-      "status": "disabled",
-      "schedule": "on-demand + daily supply check",
-      "enabled": false,
-      "wave": "4",
-      "last_log": null,
+      "name": "Social Media (RDRE)",
+      "role": "Content + engagement",
+      "status": "wave3",
+      "schedule": "daily at 6 AM, weekly Sundays, real-time engagement",
+      "enabled": true,
+      "wave": "3",
+      "last_log": "2026-02-25T12:00:22.287143",
       "entities": [
-        "bvr"
-      ]
+        "rdre"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy content drafting, establish posting calendar",
+      "blockers": [
+        "Amanda approval gate for RDRE content"
+      ],
+      "notes": "RDRE only. All posts require Amanda approval (Standing Order #40)."
     },
     {
       "key": "it_security",
@@ -168,52 +303,88 @@
       "schedule": "continuous + weekly deep Sundays",
       "enabled": false,
       "wave": "4",
-      "last_log": "2026-02-25T05:00:20.027528",
+      "last_log": "2026-02-25T11:00:20.027528",
       "entities": [
         "all"
-      ]
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy basic security scanning and alert system",
+      "blockers": [],
+      "notes": "Security monitoring and infrastructure protection."
     },
     {
-      "key": "social_media",
+      "key": "contracts_legal",
       "number": 12,
-      "name": "Social Media (RDRE)",
-      "role": "Content + engagement",
-      "status": "wave3",
-      "schedule": "daily at 6 AM, weekly Sundays, real-time engagement",
-      "enabled": true,
-      "wave": "3",
-      "last_log": "2026-02-25T06:00:22.287143",
-      "entities": [
-        "rdre"
-      ]
-    },
-    {
-      "key": "email_triage",
-      "number": 13,
-      "name": "Email Triage",
-      "role": "5 Gmail accounts",
+      "name": "Contracts & Legal",
+      "role": "Document review",
       "status": "disabled",
-      "schedule": "Not configured",
+      "schedule": "on-demand + weekly Fridays + monthly 1st",
       "enabled": false,
-      "wave": "1.2",
-      "last_log": "2026-02-25T19:24:22.039134",
-      "entities": [
-        "all"
-      ]
-    },
-    {
-      "key": "bookkeeper",
-      "number": 14,
-      "name": "Bookkeeper & Accounting",
-      "role": "7 entities, QuickBooks",
-      "status": "disabled",
-      "schedule": "daily at 11 PM, weekly close Sundays, monthly close 1st",
-      "enabled": false,
-      "wave": "3",
+      "wave": "4",
       "last_log": null,
       "entities": [
         "all"
-      ]
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy document intake and review pipeline",
+      "blockers": [],
+      "notes": "Document review, on-demand. Draft-only mode."
+    },
+    {
+      "key": "process_improvement",
+      "number": 13,
+      "name": "Process Improvement",
+      "role": "SOP optimization",
+      "status": "disabled",
+      "schedule": "weekly Sundays, continuous monitoring",
+      "enabled": false,
+      "wave": "4",
+      "last_log": null,
+      "entities": [
+        "all"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy after 5+ agents active, analyze workflow patterns",
+      "blockers": [
+        "Needs multiple agents running to have meaningful data"
+      ],
+      "notes": "SOP optimization. Best deployed after several agents are running to have data to analyze."
+    },
+    {
+      "key": "purchasing",
+      "number": 14,
+      "name": "Purchasing",
+      "role": "Supply management",
+      "status": "disabled",
+      "schedule": "on-demand + daily supply check",
+      "enabled": false,
+      "wave": "4",
+      "last_log": null,
+      "entities": [
+        "bvr"
+      ],
+      "autonomy_stage": "not_started",
+      "autonomy_stage_label": "Not Started",
+      "autonomy_stage_color": "#71717a",
+      "autonomy_pct": 0,
+      "deployed_date": null,
+      "next_milestone": "Deploy supply tracking, integrate with BVR property data",
+      "blockers": [
+        "BVR Operations and Property Listing should be stable first"
+      ],
+      "notes": "Supply management for BVR properties."
     }
   ],
   "escalations": [
@@ -258,47 +429,53 @@
     {
       "text": "Follow up with Provident Loan Servicing if no response to Feb 21 formal escalation \u2014 by March 6. Rem",
       "date": "2026-02-21",
-      "days_until": -4,
+      "days_until": -5,
       "severity": "high"
     },
     {
       "text": "Follow up with John Marshall (JM Investment Trust / JM Partners LLC) if payoff statement not receive",
       "date": "2026-02-28",
-      "days_until": 3,
+      "days_until": 2,
       "severity": "high"
     },
     {
       "text": "If Provident misses March 6 deadline: escalate \u2014 consider regulatory complaint or legal counsel",
       "date": "2026-03-06",
-      "days_until": 9,
+      "days_until": 8,
+      "severity": "medium"
+    },
+    {
+      "text": "**SEARCH ALL EMAIL ACCOUNTS for tax extension confirmations** \u2014 5-6 entities need March 15 filings. ",
+      "date": "2026-03-15",
+      "days_until": 17,
       "severity": "medium"
     }
   ],
   "system_health": {
     "watchdog": {
-      "status": "warning",
-      "detail": "Last check: 06:01 PM"
+      "status": "ok",
+      "detail": "Last check: 01:33 AM"
     },
     "auto_backup": {
       "status": "ok",
-      "detail": "Last: 07:16 PM"
+      "detail": "Last: 01:33 AM"
     },
     "morning_briefing": {
       "status": "ok",
-      "detail": "Sent at 07:00 AM"
+      "detail": "Sent at 01:33 AM"
     },
     "auto_merge": {
       "status": "ok",
-      "detail": "Last: 07:29 PM"
+      "detail": "Last: 01:29 AM"
     },
     "github_push": {
       "status": "ok",
-      "detail": "Last: 07:16 PM"
+      "detail": "Last: 01:33 AM"
     }
   },
   "tasks": {
-    "pending": 68,
-    "completed": 66,
+    "pending": 63,
+    "completed": 65,
     "overdue": 10,
     "due_today": 1
   },
@@ -453,7 +630,7 @@
           {
             "id": "rdre-website",
             "name": "WordPress Website Live",
-            "description": "WordPress site hosted within GHL (GHL's WordPress hosting). CMS is WordPress via GHL \u2014 not a separate WordPress install. GHL stays as the hosting platform.",
+            "description": "Migrate from GHL website builder to WordPress for full design control",
             "target_date": "2026-03-31",
             "progress": 0.6,
             "status": "on_track",
@@ -467,7 +644,7 @@
                 "done": true
               },
               {
-                "label": "WordPress deployed via GHL hosting",
+                "label": "Hosting selected",
                 "done": false
               },
               {

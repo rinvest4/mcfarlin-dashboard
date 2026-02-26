@@ -107,6 +107,10 @@
   .btn-view{background:var(--bbg);color:var(--blue);border:1px solid rgba(59,130,246,.3)}
   .btn-view:hover{background:rgba(59,130,246,.25)}
 
+  /* Agent autonomy progress */
+  .ar .pb{margin-top:0}
+  .ar-main{flex-wrap:wrap}
+
   /* Empty state */
   .empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
   .empty-state .emoji{font-size:2rem;margin-bottom:8px}
@@ -192,8 +196,8 @@
   </div>
   <div class="stats" id="summary-stats">
     <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Active</div></div>
-    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Blocked</div></div>
-    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Disabled</div></div>
+    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">In Training</div></div>
+    <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Avg Autonomy</div></div>
     <div class="ms"><div class="v" style="color:var(--muted)">-</div><div class="l">Escalations</div></div>
   </div>
 </div>
@@ -253,7 +257,11 @@
 
 <!-- AGENTS TAB -->
 <div class="tab-content" id="tab-agents">
-  <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Agent status updated every 30 minutes by Operations Commander.</p>
+  <p style="font-size:.85rem;color:var(--muted);margin-bottom:12px">Implementation order &bull; Autonomy status updated as agents progress through training.</p>
+  <div id="autonomy-summary" class="card" style="margin-bottom:12px">
+    <div class="card-t">Team Autonomy Progress</div>
+    <div id="autonomy-bar-container"></div>
+  </div>
   <div class="card" id="agents-list">
     <div class="loading"><div class="loading-spin"></div><br>Loading agents...</div>
   </div>
@@ -373,12 +381,6 @@ const ROLES_CONFIG = {
 };
 
 const STATUS_URL = 'status.json';
-// Embedded status data as fallback when API and static file are unavailable
-<<<<<<< HEAD
-const EMBEDDED_STATUS = {"generated_at":"2026-02-25T19:31:25.815522","heartbeat":{"timestamp":"2026-02-25T19:31:25.815522","hostname":"Seans-Mac-mini"},"summary":{"active_agents":1,"blocked_agents":7,"disabled_agents":6,"escalations":9,"pending_tasks":68,"completed_tasks":66,"overdue_tasks":10,"due_today":1},"agents":[{"key":"operations_commander","number":1,"name":"Operations Commander","role":"Orchestrator","status":"running","schedule":"every 30 minutes","enabled":true,"wave":"1.1","last_log":"2026-02-25T19:31:25.791222","entities":["all"]},{"key":"bvr_operations","number":2,"name":"BVR Operations","role":"Hostaway + Revenue","status":"next_up","schedule":"every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM","enabled":true,"wave":"1.3","last_log":"2026-02-25T18:01:26.521054","entities":["bvr"]},{"key":"seo_marketing","number":3,"name":"SEO & Marketing","role":"3 sites","status":"wave3","schedule":"daily at 5 AM, weekly deep Mondays","enabled":true,"wave":"3","last_log":null,"entities":["rdre","bvr","personal"]},{"key":"lead_crm","number":4,"name":"Lead & CRM","role":"GHL + Pipedrive","status":"wave2","schedule":"every hour during business hours","enabled":true,"wave":"2.1","last_log":"2026-02-25T18:01:38.889873","entities":["rdre"]},{"key":"financial_oversight","number":5,"name":"Financial Oversight","role":"6 entities","status":"wave2","schedule":"daily at 7 AM, monthly deep on 1st","enabled":true,"wave":"2.2","last_log":"2026-02-25T07:00:26.177655","entities":["all"]},{"key":"bvr_property_listing","number":6,"name":"BVR Property & Listing","role":"Listing management","status":"wave4","schedule":"daily at 8 AM","enabled":true,"wave":"4","last_log":null,"entities":["bvr"]},{"key":"website_content","number":7,"name":"Website & Content","role":"Site monitoring","status":"wave3","schedule":"daily monitoring, continuous for active builds","enabled":true,"wave":"3","last_log":null,"entities":["rdre","bvr","personal"]},{"key":"contracts_legal","number":8,"name":"Contracts & Legal","role":"Document review","status":"disabled","schedule":"on-demand + weekly Fridays + monthly 1st","enabled":false,"wave":"4","last_log":null,"entities":["all"]},{"key":"process_improvement","number":9,"name":"Process Improvement","role":"SOP optimization","status":"disabled","schedule":"weekly Sundays, continuous monitoring","enabled":false,"wave":"4","last_log":null,"entities":["all"]},{"key":"purchasing","number":10,"name":"Purchasing","role":"Supply management","status":"disabled","schedule":"on-demand + daily supply check","enabled":false,"wave":"4","last_log":null,"entities":["bvr"]},{"key":"it_security","number":11,"name":"IT Security","role":"Security monitoring","status":"disabled","schedule":"continuous + weekly deep Sundays","enabled":false,"wave":"4","last_log":"2026-02-25T05:00:20.027528","entities":["all"]},{"key":"social_media","number":12,"name":"Social Media (RDRE)","role":"Content + engagement","status":"wave3","schedule":"daily at 6 AM, weekly Sundays, real-time engagement","enabled":true,"wave":"3","last_log":"2026-02-25T06:00:22.287143","entities":["rdre"]},{"key":"email_triage","number":13,"name":"Email Triage","role":"5 Gmail accounts","status":"disabled","schedule":"Not configured","enabled":false,"wave":"1.2","last_log":"2026-02-25T19:24:22.039134","entities":["all"]},{"key":"bookkeeper","number":14,"name":"Bookkeeper & Accounting","role":"7 entities, QuickBooks","status":"disabled","schedule":"daily at 11 PM, weekly close Sundays, monthly close 1st","enabled":false,"wave":"3","last_log":null,"entities":["all"]}],"escalations":[{"source":"financial/financial-daily-2026-02-25.md","keyword":"urgent"},{"source":"security/security-check-2026-02-25-0500.md","keyword":"error"},{"source":"email-triage/triage-2026-02-24.md","keyword":"error"},{"source":"email-triage/triage-2026-02-25.md","keyword":"error"},{"source":"crm/crm-check-2026-02-25-0726.md","keyword":"error"},{"source":"crm/crm-check-2026-02-25-0325.md","keyword":"error"},{"source":"crm/crm-check-2026-02-24-2325.md","keyword":"error"},{"source":"crm/crm-check-2026-02-25-1801.md","keyword":"error"},{"source":"content/content-daily-2026-02-25.md","keyword":"error"}],"deadlines":[{"text":"Follow up with Provident Loan Servicing if no response to Feb 21 formal escalation \u2014 by March 6. Rem","date":"2026-02-21","days_until":-4,"severity":"high"},{"text":"Follow up with John Marshall (JM Investment Trust / JM Partners LLC) if payoff statement not receive","date":"2026-02-28","days_until":3,"severity":"high"},{"text":"If Provident misses March 6 deadline: escalate \u2014 consider regulatory complaint or legal counsel","date":"2026-03-06","days_until":9,"severity":"medium"}],"system_health":{"watchdog":{"status":"warning","detail":"Last check: 06:01 PM"},"auto_backup":{"status":"ok","detail":"Last: 07:16 PM"},"morning_briefing":{"status":"ok","detail":"Sent at 07:00 AM"},"auto_merge":{"status":"ok","detail":"Last: 07:29 PM"},"github_push":{"status":"ok","detail":"Last: 07:16 PM"}},"tasks":{"pending":68,"completed":66,"overdue":10,"due_today":1},"pending_approvals":[],"company_goals":{"description":"Structured company goals for the dashboard. Source of truth synced from goals.yaml. Update quarterly.","last_updated":"2026-02-24","quarter":"Q1 2026","companies":{"rdre":{"name":"Real Deal Real Estate Buyers","short_name":"RDRE","icon":"house","color":"#C8973E","annual_target":"$400K net income","annual_target_amount":400000,"team":["Sean McFarlin","Amanda McFarlin"],"priority":1,"overall_progress":0.3,"status":"on_track","summary":"Strategy complete. GHL automation built. First deal target: March 31.","goals":[{"id":"rdre-lead-automation","name":"GHL Lead Intake Fully Automated","description":"Tags, drip campaigns, auto-response all configured in GHL","target_date":"2026-03-07","progress":0.6,"status":"on_track","milestones":[{"label":"8 workflows built","done":true},{"label":"14 pipeline stages configured","done":true},{"label":"Auto-tagging live","done":false},{"label":"Drip campaigns active","done":false}]},{"id":"rdre-client-journey","name":"Full Client Journey Mapped","description":"Marketing to close process documented end-to-end","target_date":"2026-03-01","progress":1.0,"status":"complete","milestones":[{"label":"Lead flow design complete","done":true},{"label":"Skip tracing process documented","done":true},{"label":"Marketing playbook created","done":true},{"label":"30-90 day roadmap defined","done":true}]},{"id":"rdre-first-deal","name":"First Qualified Deal in Pipeline","description":"At least one qualified seller lead actively being worked","target_date":"2026-03-31","progress":0.0,"status":"on_track","milestones":[{"label":"Marketing campaigns live","done":false},{"label":"First inbound leads","done":false},{"label":"Lead qualified","done":false},{"label":"Offer submitted","done":false}]},{"id":"rdre-amanda-onboarding","name":"Amanda Fully Onboarded","description":"Clear roles defined for marketing + showings","target_date":"2026-02-28","progress":0.7,"status":"on_track","milestones":[{"label":"Strategy session completed","done":true},{"label":"Marketing lead role defined","done":true},{"label":"GHL access configured","done":true},{"label":"Approval workflow live","done":false}]},{"id":"rdre-seller-video","name":"Seller Video/Photo Submission Process","description":"Allow sellers to submit property walk-through videos or photos remotely","target_date":"2026-03-15","progress":0.0,"status":"on_track","milestones":[{"label":"Submission form designed","done":false},{"label":"Upload mechanism built","done":false},{"label":"Integrated with GHL pipeline","done":false}]},{"id":"rdre-website","name":"WordPress Website Live","description":"WordPress site hosted within GHL (GHL's WordPress hosting). CMS is WordPress via GHL \u2014 not a separate WordPress install. GHL stays as the hosting platform.","target_date":"2026-03-31","progress":0.6,"status":"on_track","milestones":[{"label":"7 pages designed on staging","done":true},{"label":"Design system finalized","done":true},{"label":"WordPress deployed via GHL hosting","done":false},{"label":"Go live with domain","done":false}]}]},"bvr":{"name":"Breezy Vacation Rentals","short_name":"BVR","icon":"palmtree","color":"#3b82f6","annual_target":"$240K net income","annual_target_amount":240000,"team":["Sean McFarlin","Joshua (VA)","Dee (VA)","Kristine (VA)"],"priority":2,"overall_progress":0.2,"status":"on_track","summary":"Operations stable. VAs covering 24/7. API connected. Focus: occupancy and expense tracking.","goals":[{"id":"bvr-hostaway-api","name":"Hostaway API Connected & Pulling Data","description":"Live property data flowing from Hostaway into agent system","target_date":"2026-03-01","progress":0.5,"status":"on_track","milestones":[{"label":"API key configured","done":true},{"label":"Agent 2 built with API integration","done":true},{"label":"Deployed and pulling live data","done":false}]},{"id":"bvr-va-sops","name":"All VAs Operating from Documented SOPs","description":"Standard operating procedures documented and followed by all VAs","target_date":"2026-03-15","progress":0.7,"status":"on_track","milestones":[{"label":"BVR SOP reviewed and documented","done":true},{"label":"VA roles defined","done":true},{"label":"SOP compliance tracking","done":false}]},{"id":"bvr-expense-tracking","name":"Expense Tracking Automated","description":"Streamlined expense tracking across all properties","target_date":"2026-03-31","progress":0.0,"status":"on_track","milestones":[{"label":"QuickBooks integration explored","done":false},{"label":"Expense categories defined","done":false},{"label":"Automated reporting","done":false}]},{"id":"bvr-occupancy","name":"Maintain 70%+ Occupancy","description":"Consistent 70%+ occupancy across all ~30 listings","target_date":"2026-12-31","progress":0.5,"status":"on_track","milestones":[{"label":"PriceLabs pricing active","done":true},{"label":"Listing optimization","done":false},{"label":"Seasonal strategy defined","done":false}]}]},"mcfarlin-re":{"name":"McFarlin Real Estate","short_name":"McFarlin RE","icon":"building","color":"#a855f7","annual_target":"$100K net income","annual_target_amount":100000,"team":["Sean McFarlin"],"priority":4,"overall_progress":0.1,"status":"on_track","summary":"Active listing at 12014 Rainforest. Revenue flows from Real Deal and existing business.","goals":[{"id":"mre-current-listing","name":"Close Current Listing","description":"Close 12014 Rainforest sale (target mid-2026)","target_date":"2026-06-30","progress":0.2,"status":"on_track","milestones":[{"label":"Listed and active","done":true},{"label":"Showing inquiries handled","done":true},{"label":"Offer received","done":false},{"label":"Closed","done":false}]},{"id":"mre-brokerage-eval","name":"Evaluate eXp to 100% Brokerage Switch","description":"After current listing closes, evaluate switching to 100% commission brokerage","target_date":"2026-08-31","progress":0.0,"status":"on_track","milestones":[{"label":"Current listing closed","done":false},{"label":"Options researched","done":false},{"label":"Decision made","done":false}]},{"id":"mre-handyman","name":"Handyman Revenue Tracking","description":"Establish tracking for handyman service revenue","target_date":"2026-03-31","progress":0.0,"status":"on_track","milestones":[{"label":"Revenue tracking system set up","done":false},{"label":"Monthly reporting","done":false}]}]},"holdings":{"name":"Holdings Portfolio","short_name":"Holdings","icon":"briefcase","color":"#22c55e","annual_target":"$240K-$290K combined net","annual_target_amount":265000,"team":["Sean McFarlin"],"priority":5,"overall_progress":0.05,"status":"on_track","summary":"Passive income entities. Monitor only. Average Jo, Montgomery Oak, ASH Homes.","entities":["Average Jo Holdings","Montgomery Oak","ASH Homes"],"goals":[{"id":"hold-quickbooks","name":"QuickBooks Reconciled","description":"All entities reconciled in QuickBooks","target_date":"2026-06-30","progress":0.0,"status":"on_track","milestones":[{"label":"QuickBooks API connected","done":false},{"label":"Entities reconciled","done":false}]},{"id":"hold-expense-budgets","name":"Expense Budgets Established","description":"Per-entity expense budgets defined and tracked","target_date":"2026-06-30","progress":0.0,"status":"on_track","milestones":[{"label":"Budget categories defined","done":false},{"label":"Monthly tracking active","done":false}]},{"id":"hold-ltr-eval","name":"LTR Management Evaluation","description":"Evaluate RPM Republic vs RentLife consolidation","target_date":"2026-08-31","progress":0.0,"status":"on_track","milestones":[{"label":"Performance comparison","done":false},{"label":"Decision made","done":false}]}]},"ridgeway":{"name":"115 Ridgeway / Gatsby","short_name":"Ridgeway","icon":"clipboard","color":"#71717a","annual_target":"Close out open items","annual_target_amount":0,"team":["Sean McFarlin"],"priority":6,"overall_progress":0.1,"status":"on_track","summary":"Not growing. Tracking 2 open items: wrap note sale and escrow overpayment.","goals":[{"id":"ridgeway-wrap-note","name":"Wrap Note Sale Closing","description":"Coordinate closing with Alamo Title + Provident Funding","target_date":"2026-03-31","progress":0.3,"status":"on_track","milestones":[{"label":"Payoff statement requested","done":true},{"label":"John Marshall follow-up (Feb 28)","done":false},{"label":"Closing coordinated","done":false}]},{"id":"ridgeway-escrow","name":"Escrow Overpayment Credit","description":"Receive $1,527.51 escrow overcharge credit from Provident","target_date":"2026-03-06","progress":0.2,"status":"at_risk","milestones":[{"label":"Formal escalation sent (Feb 21)","done":true},{"label":"Provident response by Mar 6","done":false},{"label":"Credit received","done":false}]}]}},"role_visibility":{"admin":["rdre","bvr","mcfarlin-re","holdings","ridgeway"],"rdre-marketing":["rdre"],"bvr-va":["bvr"]}}};
-=======
-const EMBEDDED_STATUS = {"generated_at":"2026-02-25T14:20:47.949738","heartbeat":{"timestamp":"2026-02-25T14:20:47.949738","hostname":"Seans-Mac-mini"},"summary":{"active_agents":1,"blocked_agents":7,"disabled_agents":6,"escalations":0,"pending_tasks":69,"completed_tasks":63,"overdue_tasks":10,"due_today":1},"agents":[{"key":"operations_commander","number":1,"name":"Operations Commander","role":"Orchestrator","status":"running","schedule":"every 30 minutes","enabled":true,"wave":"1.1","last_log":"2026-02-25T14:19:39.432628","entities":["all"]},{"key":"bvr_operations","number":2,"name":"BVR Operations","role":"Hostaway + Revenue","status":"next_up","schedule":"every 2 hours (8 AM - 10 PM CT), daily deep at 6 AM","enabled":true,"wave":"1.3","last_log":null,"entities":["bvr"]},{"key":"seo_marketing","number":3,"name":"SEO & Marketing","role":"3 sites","status":"wave3","schedule":"daily at 5 AM, weekly deep Mondays","enabled":true,"wave":"3","last_log":null,"entities":["rdre","bvr","personal"]},{"key":"lead_crm","number":4,"name":"Lead & CRM","role":"GHL + Pipedrive","status":"wave2","schedule":"every hour during business hours","enabled":true,"wave":"2.1","last_log":null,"entities":["rdre"]},{"key":"financial_oversight","number":5,"name":"Financial Oversight","role":"6 entities","status":"wave2","schedule":"daily at 7 AM, monthly deep on 1st","enabled":true,"wave":"2.2","last_log":null,"entities":["all"]},{"key":"bvr_property_listing","number":6,"name":"BVR Property & Listing","role":"Listing management","status":"wave4","schedule":"daily at 8 AM","enabled":true,"wave":"4","last_log":null,"entities":["bvr"]},{"key":"website_content","number":7,"name":"Website & Content","role":"Site monitoring","status":"wave3","schedule":"daily monitoring, continuous for active builds","enabled":true,"wave":"3","last_log":null,"entities":["rdre","bvr","personal"]},{"key":"contracts_legal","number":8,"name":"Contracts & Legal","role":"Document review","status":"disabled","schedule":"on-demand + weekly Fridays + monthly 1st","enabled":false,"wave":"4","last_log":null,"entities":["all"]},{"key":"process_improvement","number":9,"name":"Process Improvement","role":"SOP optimization","status":"disabled","schedule":"weekly Sundays, continuous monitoring","enabled":false,"wave":"4","last_log":null,"entities":["all"]},{"key":"purchasing","number":10,"name":"Purchasing","role":"Supply management","status":"disabled","schedule":"on-demand + daily supply check","enabled":false,"wave":"4","last_log":null,"entities":["bvr"]},{"key":"it_security","number":11,"name":"IT Security","role":"Security monitoring","status":"disabled","schedule":"continuous + weekly deep Sundays","enabled":false,"wave":"4","last_log":null,"entities":["all"]},{"key":"social_media","number":12,"name":"Social Media (RDRE)","role":"Content + engagement","status":"wave3","schedule":"daily at 6 AM, weekly Sundays, real-time engagement","enabled":true,"wave":"3","last_log":null,"entities":["rdre"]},{"key":"email_triage","number":13,"name":"Email Triage","role":"5 Gmail accounts","status":"disabled","schedule":"Not configured","enabled":false,"wave":"1.2","last_log":null,"entities":["all"]},{"key":"bookkeeper","number":14,"name":"Bookkeeper & Accounting","role":"7 entities, QuickBooks","status":"disabled","schedule":"daily at 11 PM, weekly close Sundays, monthly close 1st","enabled":false,"wave":"3","last_log":null,"entities":["all"]}],"escalations":[],"deadlines":[{"text":"Follow up with Provident Loan Servicing if no response to Feb 21 formal escalation \u2014 by March 6. Rem","date":"2026-02-21","days_until":-4,"severity":"high"},{"text":"Follow up with John Marshall (JM Investment Trust / JM Partners LLC) if payoff statement not receive","date":"2026-02-28","days_until":3,"severity":"high"},{"text":"If Provident misses March 6 deadline: escalate \u2014 consider regulatory complaint or legal counsel","date":"2026-03-06","days_until":9,"severity":"medium"},{"text":"**SEARCH ALL EMAIL ACCOUNTS for tax extension confirmations** \u2014 5-6 entities need March 15 filings. ","date":"2026-03-15","days_until":18,"severity":"medium"}],"system_health":{"watchdog":{"status":"ok","detail":"Last check: 02:19 PM"},"auto_backup":{"status":"ok","detail":"Last: 02:19 PM"},"morning_briefing":{"status":"ok","detail":"Sent at 02:19 PM"},"auto_merge":{"status":"warning","detail":"Check launchd"},"github_push":{"status":"ok","detail":"Last: 02:19 PM"}},"tasks":{"pending":69,"completed":63,"overdue":10,"due_today":1},"pending_approvals":[],"company_goals":{"description":"Structured company goals for the dashboard. Source of truth synced from goals.yaml. Update quarterly.","last_updated":"2026-02-24","quarter":"Q1 2026","companies":{"rdre":{"name":"Real Deal Real Estate Buyers","short_name":"RDRE","icon":"house","color":"#C8973E","annual_target":"$400K net income","annual_target_amount":400000,"team":["Sean McFarlin","Amanda McFarlin"],"priority":1,"overall_progress":0.3,"status":"on_track","summary":"Strategy complete. GHL automation built. First deal target: March 31.","goals":[{"id":"rdre-lead-automation","name":"GHL Lead Intake Fully Automated","description":"Tags, drip campaigns, auto-response all configured in GHL","target_date":"2026-03-07","progress":0.6,"status":"on_track","milestones":[{"label":"8 workflows built","done":true},{"label":"14 pipeline stages configured","done":true},{"label":"Auto-tagging live","done":false},{"label":"Drip campaigns active","done":false}]},{"id":"rdre-client-journey","name":"Full Client Journey Mapped","description":"Marketing to close process documented end-to-end","target_date":"2026-03-01","progress":1.0,"status":"complete","milestones":[{"label":"Lead flow design complete","done":true},{"label":"Skip tracing process documented","done":true},{"label":"Marketing playbook created","done":true},{"label":"30-90 day roadmap defined","done":true}]},{"id":"rdre-first-deal","name":"First Qualified Deal in Pipeline","description":"At least one qualified seller lead actively being worked","target_date":"2026-03-31","progress":0.0,"status":"on_track","milestones":[{"label":"Marketing campaigns live","done":false},{"label":"First inbound leads","done":false},{"label":"Lead qualified","done":false},{"label":"Offer submitted","done":false}]},{"id":"rdre-amanda-onboarding","name":"Amanda Fully Onboarded","description":"Clear roles defined for marketing + showings","target_date":"2026-02-28","progress":0.7,"status":"on_track","milestones":[{"label":"Strategy session completed","done":true},{"label":"Marketing lead role defined","done":true},{"label":"GHL access configured","done":true},{"label":"Approval workflow live","done":false}]},{"id":"rdre-seller-video","name":"Seller Video/Photo Submission Process","description":"Allow sellers to submit property walk-through videos or photos remotely","target_date":"2026-03-15","progress":0.0,"status":"on_track","milestones":[{"label":"Submission form designed","done":false},{"label":"Upload mechanism built","done":false},{"label":"Integrated with GHL pipeline","done":false}]},{"id":"rdre-website","name":"WordPress Website Live","description":"WordPress site hosted within GHL (GHL's WordPress hosting). CMS is WordPress via GHL \u2014 not a separate WordPress install. GHL stays as the hosting platform.","target_date":"2026-03-31","progress":0.6,"status":"on_track","milestones":[{"label":"7 pages designed on staging","done":true},{"label":"Design system finalized","done":true},{"label":"WordPress deployed via GHL hosting","done":false},{"label":"Go live with domain","done":false}]}]},"bvr":{"name":"Breezy Vacation Rentals","short_name":"BVR","icon":"palmtree","color":"#3b82f6","annual_target":"$240K net income","annual_target_amount":240000,"team":["Sean McFarlin","Joshua (VA)","Dee (VA)","Kristine (VA)"],"priority":2,"overall_progress":0.2,"status":"on_track","summary":"Operations stable. VAs covering 24/7. API connected. Focus: occupancy and expense tracking.","goals":[{"id":"bvr-hostaway-api","name":"Hostaway API Connected & Pulling Data","description":"Live property data flowing from Hostaway into agent system","target_date":"2026-03-01","progress":0.5,"status":"on_track","milestones":[{"label":"API key configured","done":true},{"label":"Agent 2 built with API integration","done":true},{"label":"Deployed and pulling live data","done":false}]},{"id":"bvr-va-sops","name":"All VAs Operating from Documented SOPs","description":"Standard operating procedures documented and followed by all VAs","target_date":"2026-03-15","progress":0.7,"status":"on_track","milestones":[{"label":"BVR SOP reviewed and documented","done":true},{"label":"VA roles defined","done":true},{"label":"SOP compliance tracking","done":false}]},{"id":"bvr-expense-tracking","name":"Expense Tracking Automated","description":"Streamlined expense tracking across all properties","target_date":"2026-03-31","progress":0.0,"status":"on_track","milestones":[{"label":"QuickBooks integration explored","done":false},{"label":"Expense categories defined","done":false},{"label":"Automated reporting","done":false}]},{"id":"bvr-occupancy","name":"Maintain 70%+ Occupancy","description":"Consistent 70%+ occupancy across all ~30 listings","target_date":"2026-12-31","progress":0.5,"status":"on_track","milestones":[{"label":"PriceLabs pricing active","done":true},{"label":"Listing optimization","done":false},{"label":"Seasonal strategy defined","done":false}]}]},"mcfarlin-re":{"name":"McFarlin Real Estate","short_name":"McFarlin RE","icon":"building","color":"#a855f7","annual_target":"$100K net income","annual_target_amount":100000,"team":["Sean McFarlin"],"priority":4,"overall_progress":0.1,"status":"on_track","summary":"Active listing at 12014 Rainforest. Revenue flows from Real Deal and existing business.","goals":[{"id":"mre-current-listing","name":"Close Current Listing","description":"Close 12014 Rainforest sale (target mid-2026)","target_date":"2026-06-30","progress":0.2,"status":"on_track","milestones":[{"label":"Listed and active","done":true},{"label":"Showing inquiries handled","done":true},{"label":"Offer received","done":false},{"label":"Closed","done":false}]},{"id":"mre-brokerage-eval","name":"Evaluate eXp to 100% Brokerage Switch","description":"After current listing closes, evaluate switching to 100% commission brokerage","target_date":"2026-08-31","progress":0.0,"status":"on_track","milestones":[{"label":"Current listing closed","done":false},{"label":"Options researched","done":false},{"label":"Decision made","done":false}]},{"id":"mre-handyman","name":"Handyman Revenue Tracking","description":"Establish tracking for handyman service revenue","target_date":"2026-03-31","progress":0.0,"status":"on_track","milestones":[{"label":"Revenue tracking system set up","done":false},{"label":"Monthly reporting","done":false}]}]},"holdings":{"name":"Holdings Portfolio","short_name":"Holdings","icon":"briefcase","color":"#22c55e","annual_target":"$240K-$290K combined net","annual_target_amount":265000,"team":["Sean McFarlin"],"priority":5,"overall_progress":0.05,"status":"on_track","summary":"Passive income entities. Monitor only. Average Jo, Montgomery Oak, ASH Homes.","entities":["Average Jo Holdings","Montgomery Oak","ASH Homes"],"goals":[{"id":"hold-quickbooks","name":"QuickBooks Reconciled","description":"All entities reconciled in QuickBooks","target_date":"2026-06-30","progress":0.0,"status":"on_track","milestones":[{"label":"QuickBooks API connected","done":false},{"label":"Entities reconciled","done":false}]},{"id":"hold-expense-budgets","name":"Expense Budgets Established","description":"Per-entity expense budgets defined and tracked","target_date":"2026-06-30","progress":0.0,"status":"on_track","milestones":[{"label":"Budget categories defined","done":false},{"label":"Monthly tracking active","done":false}]},{"id":"hold-ltr-eval","name":"LTR Management Evaluation","description":"Evaluate RPM Republic vs RentLife consolidation","target_date":"2026-08-31","progress":0.0,"status":"on_track","milestones":[{"label":"Performance comparison","done":false},{"label":"Decision made","done":false}]}]},"ridgeway":{"name":"115 Ridgeway / Gatsby","short_name":"Ridgeway","icon":"clipboard","color":"#71717a","annual_target":"Close out open items","annual_target_amount":0,"team":["Sean McFarlin"],"priority":6,"overall_progress":0.1,"status":"on_track","summary":"Not growing. Tracking 2 open items: wrap note sale and escrow overpayment.","goals":[{"id":"ridgeway-wrap-note","name":"Wrap Note Sale Closing","description":"Coordinate closing with Alamo Title + Provident Funding","target_date":"2026-03-31","progress":0.3,"status":"on_track","milestones":[{"label":"Payoff statement requested","done":true},{"label":"John Marshall follow-up (Feb 28)","done":false},{"label":"Closing coordinated","done":false}]},{"id":"ridgeway-escrow","name":"Escrow Overpayment Credit","description":"Receive $1,527.51 escrow overcharge credit from Provident","target_date":"2026-03-06","progress":0.2,"status":"at_risk","milestones":[{"label":"Formal escalation sent (Feb 21)","done":true},{"label":"Provident response by Mar 6","done":false},{"label":"Credit received","done":false}]}]}},"role_visibility":{"admin":["rdre","bvr","mcfarlin-re","holdings","ridgeway"],"rdre-marketing":["rdre"],"bvr-va":["bvr"]}}};
->>>>>>> e7d8dc27770f672d2d7ef77f328923673b44beeb
 let currentData = null;
 let currentRole = 'admin'; // default, will be overridden by auth
 let actualRole = 'admin';  // the user's real role (for admin switching back)
@@ -430,12 +432,7 @@ function getCfAccessEmail() {
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=');
       if (name === 'CF_Authorization' && value) {
-        // JWT uses base64url encoding: replace - with + and _ with /
-        let b64 = value.split('.')[1];
-        b64 = b64.replace(/-/g, '+').replace(/_/g, '/');
-        // Pad to multiple of 4
-        while (b64.length % 4) b64 += '=';
-        const payload = JSON.parse(atob(b64));
+        const payload = JSON.parse(atob(value.split('.')[1]));
         return payload.email || null;
       }
     }
@@ -659,12 +656,14 @@ function updateSummary(data) {
   const role = ROLES_CONFIG.roles[currentRole];
 
   if (currentRole === 'admin') {
-    // Admin sees full stats
+    // Admin sees autonomy-focused stats
     const s = data.summary;
+    const avgPct = s.avg_autonomy_pct || 0;
+    const avgColor = avgPct >= 60 ? 'var(--green)' : avgPct >= 30 ? 'var(--yellow)' : 'var(--muted)';
     document.getElementById('summary-stats').innerHTML = `
       <div class="ms"><div class="v" style="color:var(--green)">${s.active_agents}</div><div class="l">Active</div></div>
-      <div class="ms"><div class="v" style="color:var(--yellow)">${s.blocked_agents}</div><div class="l">Blocked</div></div>
-      <div class="ms"><div class="v" style="color:var(--muted)">${s.disabled_agents}</div><div class="l">Disabled</div></div>
+      <div class="ms"><div class="v" style="color:var(--yellow)">${s.in_training || 0}</div><div class="l">In Training</div></div>
+      <div class="ms"><div class="v" style="color:${avgColor}">${avgPct}%</div><div class="l">Avg Autonomy</div></div>
       <div class="ms"><div class="v" style="color:var(--red)">${s.escalations}</div><div class="l">Escalations</div></div>
     `;
   } else if (currentRole === 'rdre-marketing') {
@@ -770,12 +769,48 @@ function updateTasks(data) {
 //  AGENTS
 // ══════════════════════════════════════════
 
+function updateAutonomySummary(data) {
+  const el = document.getElementById('autonomy-bar-container');
+  if (!data || !data.autonomy_stage_counts) {
+    el.innerHTML = '';
+    return;
+  }
+  const counts = data.autonomy_stage_counts;
+  const stages = data.autonomy_stages || {};
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  if (total === 0) { el.innerHTML = ''; return; }
+
+  const stageOrder = ['autonomous', 'semi_autonomous', 'supervised', 'in_training', 'deployed', 'not_started'];
+  const barSegments = stageOrder
+    .filter(s => counts[s] > 0)
+    .map(s => {
+      const pct = Math.round((counts[s] / total) * 100);
+      const info = stages[s] || {};
+      return `<div style="width:${pct}%;background:${info.color || '#71717a'};height:100%;min-width:${pct > 0 ? '2px' : '0'}" title="${info.label || s}: ${counts[s]}"></div>`;
+    }).join('');
+
+  const legend = stageOrder
+    .filter(s => counts[s] > 0)
+    .map(s => {
+      const info = stages[s] || {};
+      return `<span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px;font-size:.72rem;color:var(--muted)"><span style="width:8px;height:8px;border-radius:50%;background:${info.color || '#71717a'}"></span>${info.label || s} (${counts[s]})</span>`;
+    }).join('');
+
+  el.innerHTML = `
+    <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;margin-bottom:8px">${barSegments}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px">${legend}</div>
+  `;
+}
+
 function updateAgents(data) {
   const el = document.getElementById('agents-list');
   if (!data || !data.agents) {
     el.innerHTML = '<div style="color:var(--muted);padding:12px">No agent data</div>';
     return;
   }
+
+  // Also update the autonomy summary bar
+  updateAutonomySummary(data);
 
   const agents = filterAgentsForRole(data.agents);
 
@@ -785,29 +820,54 @@ function updateAgents(data) {
   }
 
   el.innerHTML = agents.map(a => {
-    const statusMap = {
-      running: { badge: 'bg', label: 'Running', dot: 'dg', numBg: 'var(--gbg)', numColor: 'var(--green)' },
-      next_up: { badge: 'by', label: 'Next Up', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
-      partial: { badge: 'bb', label: 'Partial', dot: 'db', numBg: 'var(--bbg)', numColor: 'var(--blue)' },
-      wave2: { badge: 'by', label: 'Wave 2', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
-      wave3: { badge: 'by', label: 'Wave 3', dot: 'dy', numBg: 'var(--ybg)', numColor: 'var(--yellow)' },
-      wave4: { badge: 'bp', label: 'Wave 4', dot: 'dp', numBg: 'var(--border)', numColor: 'var(--muted)' },
-      disabled: { badge: 'bp', label: 'Disabled', dot: 'dp', numBg: 'var(--border)', numColor: 'var(--muted)' },
-    };
-    const s = statusMap[a.status] || statusMap.disabled;
-    const lastRun = a.last_log ? 'Last: ' + timeAgo(a.last_log) : 'No logs yet';
+    const stageColor = a.autonomy_stage_color || '#71717a';
+    const stageLabel = a.autonomy_stage_label || 'Not Started';
+    const pct = a.autonomy_pct || 0;
+    const lastRun = a.last_log ? 'Last: ' + timeAgo(a.last_log) : '';
+    const milestone = a.next_milestone || '';
+    const blockers = (a.blockers || []);
+    const hasBlockers = blockers.length > 0;
+
+    // Number badge uses stage color
+    const numBg = stageColor + '20';
+
+    // Detail line
+    let detailParts = [escHtml(a.role)];
+    if (lastRun) detailParts.push(lastRun);
+    const detailLine = detailParts.join(' \u2022 ');
+
+    // Expandable section with milestone + blockers
+    let expandHtml = '';
+    if (milestone || hasBlockers) {
+      expandHtml = '<div style="padding:4px 0 8px 40px;font-size:.78rem">';
+      if (milestone) {
+        expandHtml += '<div style="color:var(--muted);margin-bottom:4px"><strong style="color:var(--text)">Next:</strong> ' + escHtml(milestone) + '</div>';
+      }
+      if (hasBlockers) {
+        expandHtml += '<div style="color:var(--red)"><strong>Blocked:</strong> ' + blockers.map(b => escHtml(b)).join(', ') + '</div>';
+      }
+      expandHtml += '</div>';
+    }
 
     return `<div class="ar">
       <div class="ar-main">
         <div class="ar-left">
-          <div class="anum" style="background:${s.numBg};color:${s.numColor}">${a.number}</div>
-          <div style="min-width:0">
-            <div class="aname">${escHtml(a.name)}</div>
-            <div class="adet">${escHtml(a.role)} \u2022 ${escHtml(a.schedule)} \u2022 ${lastRun}</div>
+          <div class="anum" style="background:${numBg};color:${stageColor}">${a.number}</div>
+          <div style="min-width:0;flex:1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span class="aname">${escHtml(a.name)}</span>
+              <span class="badge" style="background:${stageColor}18;color:${stageColor}">${stageLabel}</span>
+              ${hasBlockers ? '<span class="badge br" style="font-size:.65rem">BLOCKED</span>' : ''}
+            </div>
+            <div class="adet">${detailLine}</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+              <div class="pb" style="flex:1;margin:0;height:5px"><div class="pf" style="width:${pct}%;background:${stageColor}"></div></div>
+              <span style="font-size:.7rem;font-weight:600;color:${stageColor};min-width:32px;text-align:right">${pct}%</span>
+            </div>
           </div>
         </div>
-        <span class="badge ${s.badge}"><span class="dot ${s.dot}"></span> ${s.label}</span>
       </div>
+      ${expandHtml}
     </div>`;
   }).join('');
 }
@@ -1202,62 +1262,27 @@ function renderAll(data) {
 //  LOAD STATUS
 // ══════════════════════════════════════════
 
-function statusAge(d) {
-  // Returns age in ms of a status object based on its generated_at field
-  if (!d || !d.generated_at) return Infinity;
-  return Date.now() - new Date(d.generated_at).getTime();
-}
-
-function pickFreshest(a, aLabel, b, bLabel) {
-  // Return the data object with the more recent generated_at
-  if (!a) return { data: b, source: bLabel };
-  if (!b) return { data: a, source: aLabel };
-  return statusAge(a) <= statusAge(b)
-    ? { data: a, source: aLabel }
-    : { data: b, source: bLabel };
-}
-
 async function loadStatus() {
-  let source = 'embedded';
   try {
-    let apiData = null, staticData = null;
-
-    // Try KV-backed API first (real-time)
+    // Try KV-backed API first (real-time), fall back to static file
+    let resp;
     try {
-      const resp = await fetch('/api/sync?t=' + Date.now());
-      if (resp.ok) {
-        const text = await resp.text();
-        if (text.length > 2 && text.charAt(0) === '{') { apiData = JSON.parse(text); }
-      }
-    } catch (e) { console.warn('API fetch failed:', e.message); }
-
-    // Try static file
-    if (!apiData) {
-      try {
-        const resp = await fetch(STATUS_URL + '?t=' + Date.now());
-        if (resp.ok) {
-          const text = await resp.text();
-          if (text.length > 2 && text.charAt(0) === '{') { staticData = JSON.parse(text); }
-        }
-      } catch (e) { console.warn('Static fetch failed:', e.message); }
+      resp = await fetch('/api/sync?t=' + Date.now());
+      if (!resp.ok) throw new Error('API returned ' + resp.status);
+    } catch {
+      resp = await fetch(STATUS_URL + '?t=' + Date.now());
     }
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    currentData = await resp.json();
 
-    // Pick the freshest source: compare fetched data against embedded data.
-    // This prevents stale KV data from overriding a newer embedded snapshot.
-    let best = pickFreshest(apiData, 'api', staticData, 'static');
-    best = pickFreshest(best.data, best.source, EMBEDDED_STATUS, 'embedded');
-    let data = best.data;
-    source = best.source;
+    renderAll(currentData);
 
-    if (data) {
-      currentData = data;
-      renderAll(currentData);
-      const srcLabel = source === 'api' ? 'live' : source === 'static' ? 'file' : 'cached';
-      document.getElementById('footer-ts').textContent =
-        'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString() + ' (' + srcLabel + ')';
-    }
+    document.getElementById('footer-ts').textContent =
+      'McFarlin AI Agent System \u2022 Last loaded: ' + new Date().toLocaleTimeString();
   } catch (err) {
     console.error('Failed to load status:', err);
+    updateHeartbeat(null);
+    document.getElementById('date-line').textContent = 'Failed to load data \u2014 ' + err.message;
   }
 }
 
@@ -1265,19 +1290,8 @@ async function loadStatus() {
 //  INIT
 // ══════════════════════════════════════════
 
-// Immediately render embedded data so dashboard is never blank
-try {
-  detectRole();
-  applyRole();
-  if (EMBEDDED_STATUS) {
-    currentData = EMBEDDED_STATUS;
-    renderAll(currentData);
-    document.getElementById('footer-ts').textContent =
-      'McFarlin AI Agent System \u2022 Loaded from cache';
-  }
-} catch (e) { console.error('Init render error:', e); }
-
-// Then try to fetch fresh data (will overwrite embedded if successful)
+detectRole();
+applyRole();
 loadStatus();
 setInterval(loadStatus, 5 * 60 * 1000);
 </script>
