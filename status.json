@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-02-26T01:36:15.973838",
+  "generated_at": "2026-02-26T02:01:25.083443",
   "heartbeat": {
-    "timestamp": "2026-02-26T01:36:15.973838",
+    "timestamp": "2026-02-26T02:01:25.083443",
     "hostname": "Seans-Mac-mini"
   },
   "summary": {
@@ -87,7 +87,7 @@
       "schedule": "Not configured",
       "enabled": false,
       "wave": "1.2",
-      "last_log": "2026-02-26T01:24:22.039134",
+      "last_log": "2026-02-26T01:55:24.024446",
       "entities": [
         "all"
       ],
@@ -458,19 +458,19 @@
     },
     "auto_backup": {
       "status": "ok",
-      "detail": "Last: 01:33 AM"
+      "detail": "Last: 01:47 AM"
     },
     "morning_briefing": {
       "status": "ok",
       "detail": "Sent at 01:33 AM"
     },
     "auto_merge": {
-      "status": "ok",
+      "status": "warning",
       "detail": "Last: 01:29 AM"
     },
     "github_push": {
       "status": "ok",
-      "detail": "Last: 01:33 AM"
+      "detail": "Last: 01:47 AM"
     }
   },
   "tasks": {
